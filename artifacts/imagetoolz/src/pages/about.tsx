@@ -1,9 +1,15 @@
 import { Layout } from "@/components/layout";
+import { usePageTitle } from "@/hooks/use-page-title";
 import {
   Layers, Shield, Zap, Heart, Globe, Code2,
-  Maximize2, Archive, Repeat, Crop, Type, RotateCw, FileText, Pipette, ShieldOff
+  Maximize2, Archive, Repeat, Crop, Type, RotateCw, FileText, Pipette, ShieldOff, Mail
 } from "lucide-react";
 import { Link } from "wouter";
+
+const SITE = "CropImages";
+const DOMAIN = "cropimages.store";
+const EMAIL = "iftechstudio@gmail.com";
+const AUTHOR = "If Tech Studio Team";
 
 const tools = [
   { name: "Image Resizer", slug: "image-resizer", icon: Maximize2, desc: "Resize images to any dimension while preserving quality." },
@@ -18,13 +24,14 @@ const tools = [
 ];
 
 const values = [
-  { icon: Shield, title: "Privacy First", desc: "We built ImageToolz on a fundamental principle: your images should never leave your device. Every single tool runs entirely in your browser using the Web Canvas API." },
-  { icon: Zap, title: "Speed & Simplicity", desc: "No account creation, no waiting for uploads, no hidden fees. Open a tool, drag your image in, get your result. That's it." },
-  { icon: Heart, title: "Always Free", desc: "ImageToolz is and always will be free. We sustain the service through tasteful, non-intrusive advertising. No paywalls, no watermarks on your output." },
-  { icon: Globe, title: "Works Everywhere", desc: "Built with modern web standards, ImageToolz works on any device and any modern browser — desktop, tablet, or mobile." },
+  { icon: Shield, title: "Privacy First", desc: "Your images never leave your device. Every tool runs entirely in your browser using the HTML5 Canvas API — zero server uploads." },
+  { icon: Zap, title: "Speed & Simplicity", desc: "No account creation, no waiting for uploads, no hidden fees. Open a tool, drop your image, get your result. That's it." },
+  { icon: Heart, title: "Always Free", desc: "CropImages is and always will be free. We sustain the service through tasteful, non-intrusive advertising. No paywalls, no watermarks on output." },
+  { icon: Globe, title: "Works Everywhere", desc: "Built with modern web standards, CropImages works on any device and any modern browser — desktop, tablet, or mobile." },
 ];
 
 export default function About() {
+  usePageTitle("About Us");
   return (
     <Layout>
       {/* Hero */}
@@ -32,18 +39,22 @@ export default function About() {
         className="relative overflow-hidden py-20 px-4"
         style={{ background: "linear-gradient(135deg, #14532d 0%, #166534 40%, #16a34a 100%)" }}
       >
-        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5" />
-        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5" />
+        <div className="absolute -top-16 -right-16 w-64 h-64 rounded-full bg-white/5 pointer-events-none" />
+        <div className="absolute -bottom-10 -left-10 w-48 h-48 rounded-full bg-white/5 pointer-events-none" />
         <div className="relative max-w-3xl mx-auto text-center">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="w-14 h-14 rounded-2xl bg-white/15 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-sm flex items-center justify-center border border-white/20">
               <Layers className="w-7 h-7 text-white" />
             </div>
           </div>
-          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">About ImageToolz</h1>
+          <h1 className="text-4xl sm:text-5xl font-bold text-white tracking-tight">About {SITE}</h1>
           <p className="mt-4 text-green-100 text-lg sm:text-xl max-w-2xl mx-auto leading-relaxed">
-            A free, private, browser-based image toolkit built for everyone — designers, developers, photographers, and everyday users.
+            A free, private, browser-based image toolkit built by <strong className="text-white">{AUTHOR}</strong>.
           </p>
+          <a href={`mailto:${EMAIL}`} className="inline-flex items-center gap-2 mt-5 px-4 py-2 rounded-lg bg-white/15 border border-white/20 text-white text-sm font-medium hover:bg-white/25 transition-colors">
+            <Mail className="w-4 h-4" />
+            {EMAIL}
+          </a>
         </div>
       </section>
 
@@ -52,9 +63,9 @@ export default function About() {
         <section>
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Our Mission</h2>
           <div className="text-gray-600 dark:text-gray-300 space-y-4 text-base leading-relaxed">
-            <p>ImageToolz was created with a simple mission: to give everyone access to powerful image processing tools without the barriers of subscriptions, account registration, or privacy concerns.</p>
+            <p>{SITE} was created with a simple mission: to give everyone access to powerful image processing tools without the barriers of subscriptions, account registration, or privacy concerns.</p>
             <p>The web is full of image tools that require you to upload your photos to a remote server, create an account, and often pay for basic features. We believed there was a better way. With modern browser capabilities like the HTML5 Canvas API, Web Workers, and powerful JavaScript libraries, it's possible to do sophisticated image processing entirely on the user's device.</p>
-            <p>The result is ImageToolz — a suite of 9 professional-grade tools that are completely free, require no sign-up, and never send your images anywhere. Your photos stay on your device. Always.</p>
+            <p>The result is {SITE} — a suite of 9 professional-grade tools that are completely free, require no sign-up, and never send your images anywhere. Your photos stay on your device. Always.</p>
           </div>
         </section>
 
@@ -64,7 +75,7 @@ export default function About() {
             {values.map((v) => {
               const Icon = v.icon;
               return (
-                <div key={v.title} className="p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm">
+                <div key={v.title} className="p-6 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 shadow-sm hover:shadow-md transition-shadow">
                   <div className="w-11 h-11 rounded-lg bg-green-50 dark:bg-green-950/40 flex items-center justify-center mb-4">
                     <Icon className="w-5 h-5 text-green-600 dark:text-green-400" />
                   </div>
@@ -80,11 +91,11 @@ export default function About() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How It Works</h2>
           <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-6">
             <div className="flex items-start gap-3 mb-3">
-              <Code2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5" />
+              <Code2 className="w-5 h-5 text-green-600 dark:text-green-400 mt-0.5 shrink-0" />
               <h3 className="font-semibold text-gray-900 dark:text-white">Entirely Client-Side Processing</h3>
             </div>
             <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-3">
-              Every tool on ImageToolz uses browser-native APIs. When you select an image, it's loaded directly into your browser's memory using JavaScript's FileReader API. Processing happens using the HTML5 Canvas API, which lets us draw, transform, compress, and export images without any server involvement.
+              Every tool on {SITE} uses browser-native APIs. When you select an image, it's loaded directly into your browser's memory using JavaScript's FileReader API. Processing happens using the HTML5 Canvas API, which lets us draw, transform, compress, and export images without any server involvement.
             </p>
             <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">
               Libraries like <strong>browser-image-compression</strong> handle advanced compression, <strong>jsPDF</strong> handles PDF generation, and the native Canvas API handles resizing, cropping, rotation, watermarking, and color extraction. The result is fast, private, and completely free.
@@ -114,6 +125,18 @@ export default function About() {
               );
             })}
           </div>
+        </section>
+
+        <section className="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-700 p-6">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2">Get in Touch</h2>
+          <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 leading-relaxed">
+            Have a question, a feature idea, or found a bug? We'd love to hear from you.
+          </p>
+          <a href={`mailto:${EMAIL}`}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-lg bg-green-600 hover:bg-green-700 text-white text-sm font-semibold transition-colors">
+            <Mail className="w-4 h-4" />
+            {EMAIL}
+          </a>
         </section>
 
       </div>

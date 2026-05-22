@@ -1,7 +1,14 @@
 import { Layout } from "@/components/layout";
+import { usePageTitle } from "@/hooks/use-page-title";
 import { Shield, Lock, Eye, Server, UserX, Mail } from "lucide-react";
 
+const SITE = "CropImages";
+const DOMAIN = "cropimages.store";
+const EMAIL = "iftechstudio@gmail.com";
+const AUTHOR = "If Tech Studio Team";
+
 export default function Privacy() {
+  usePageTitle("Privacy Policy");
   return (
     <Layout>
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
@@ -10,23 +17,23 @@ export default function Privacy() {
             <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
-            <h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
+            <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Privacy Policy</h1>
           </div>
-          <p className="text-gray-500 text-sm">Last updated: May 22, 2026</p>
-          <p className="mt-4 text-gray-600 text-base leading-relaxed">
-            At ImageToolz, your privacy is our top priority. This Privacy Policy explains how we collect, use, and protect your information when you use our free online image processing tools.
+          <p className="text-gray-500 dark:text-gray-400 text-sm">Last updated: May 22, 2026 &nbsp;·&nbsp; <span className="font-medium">{AUTHOR}</span></p>
+          <p className="mt-4 text-gray-600 dark:text-gray-300 text-base leading-relaxed">
+            At {SITE} ({DOMAIN}), your privacy is our top priority. This Privacy Policy explains how we collect, use, and protect your information when you use our free online image processing tools.
           </p>
         </div>
 
-        <div className="space-y-10 text-gray-700">
+        <div className="space-y-10 text-gray-700 dark:text-gray-300">
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Lock className="w-5 h-5 text-green-600" />
-              <h2 className="text-xl font-bold text-gray-900">1. Your Images Stay on Your Device</h2>
+              <Lock className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">1. Your Images Stay on Your Device</h2>
             </div>
             <p className="leading-relaxed">
-              All image processing on ImageToolz is performed <strong>entirely within your web browser</strong> using the HTML5 Canvas API and client-side JavaScript libraries. When you upload an image to any of our tools — including the Image Resizer, Compressor, Converter, Cropper, Watermark tool, Rotator, Color Picker, Image to PDF, or Metadata Remover — <strong>your image files are never transmitted to our servers</strong> or any third-party server.
+              All image processing on {SITE} is performed <strong>entirely within your web browser</strong> using the HTML5 Canvas API and client-side JavaScript libraries. When you use any of our tools — Image Resizer, Compressor, Converter, Cropper, Watermark, Rotator, Color Picker, Image to PDF, or Metadata Remover — <strong>your image files are never transmitted to our servers</strong> or any third-party server.
             </p>
             <p className="mt-3 leading-relaxed">
               Your images are loaded directly into your browser's memory, processed locally, and the result is downloaded directly to your device. Once you close or refresh the browser tab, all data is gone. We have no technical ability to access, view, or store your images.
@@ -35,8 +42,8 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Eye className="w-5 h-5 text-green-600" />
-              <h2 className="text-xl font-bold text-gray-900">2. Information We Collect</h2>
+              <Eye className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">2. Information We Collect</h2>
             </div>
             <p className="leading-relaxed mb-3">
               While we do not collect your images, we collect limited, non-personal technical data to improve our service:
@@ -57,11 +64,11 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Server className="w-5 h-5 text-green-600" />
-              <h2 className="text-xl font-bold text-gray-900">3. Cookies and Third-Party Services</h2>
+              <Server className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">3. Cookies and Third-Party Services</h2>
             </div>
             <p className="leading-relaxed mb-3">
-              ImageToolz may use the following third-party services which may set cookies or collect data according to their own privacy policies:
+              {SITE} may use the following third-party services which may set cookies or collect data according to their own privacy policies:
             </p>
             <ul className="space-y-2 list-none">
               {[
@@ -74,30 +81,30 @@ export default function Privacy() {
                 </li>
               ))}
             </ul>
-            <p className="mt-3 text-sm text-gray-500">
+            <p className="mt-3 text-sm text-gray-500 dark:text-gray-400">
               You can control cookie preferences through your browser settings. Disabling cookies may affect some functionality.
             </p>
           </section>
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <UserX className="w-5 h-5 text-green-600" />
-              <h2 className="text-xl font-bold text-gray-900">4. Children's Privacy</h2>
+              <UserX className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">4. Children's Privacy</h2>
             </div>
             <p className="leading-relaxed">
-              ImageToolz is not directed to children under the age of 13. We do not knowingly collect any personal information from children. If you believe a child has provided personal information through our site, please contact us immediately so we can remove it.
+              {SITE} is not directed to children under the age of 13. We do not knowingly collect any personal information from children. If you believe a child has provided personal information through our site, please contact us immediately at <a href={`mailto:${EMAIL}`} className="text-green-600 dark:text-green-400 hover:underline">{EMAIL}</a> so we can remove it.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">5. Data Retention</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">5. Data Retention</h2>
             <p className="leading-relaxed">
               Since we do not store your images, there is no image data to retain or delete. The limited, non-personal usage statistics we collect (tool name, file type, file size) are retained in aggregate for up to 12 months to analyze trends and improve the service. They contain no personally identifiable information.
             </p>
           </section>
 
           <section>
-            <h2 className="text-xl font-bold text-gray-900 mb-3">6. Changes to This Policy</h2>
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-3">6. Changes to This Policy</h2>
             <p className="leading-relaxed">
               We may update this Privacy Policy from time to time. We will notify you of significant changes by updating the "Last updated" date at the top of this page. We encourage you to review this page periodically.
             </p>
@@ -105,15 +112,16 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Mail className="w-5 h-5 text-green-600" />
-              <h2 className="text-xl font-bold text-gray-900">7. Contact Us</h2>
+              <Mail className="w-5 h-5 text-green-600 dark:text-green-400" />
+              <h2 className="text-xl font-bold text-gray-900 dark:text-white">7. Contact Us</h2>
             </div>
             <p className="leading-relaxed">
               If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us at:
             </p>
-            <div className="mt-3 p-4 bg-green-50 rounded-lg border border-green-100">
-              <p className="font-semibold text-gray-900">ImageToolz Support</p>
-              <p className="text-green-600 mt-1">support@imagetoolz.app</p>
+            <div className="mt-4 p-5 bg-green-50 dark:bg-green-950/30 rounded-xl border border-green-100 dark:border-green-900">
+              <p className="font-semibold text-gray-900 dark:text-white">{AUTHOR}</p>
+              <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{SITE} · {DOMAIN}</p>
+              <a href={`mailto:${EMAIL}`} className="inline-block mt-2 text-green-600 dark:text-green-400 font-medium hover:underline">{EMAIL}</a>
             </div>
           </section>
 
