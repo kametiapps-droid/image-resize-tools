@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef } from "react";
-import { UploadCloud } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { UploadCloud, ImageIcon, Plus } from "lucide-react";
 
 export function FileUploader({
   onUpload,
@@ -49,11 +48,18 @@ export function FileUploader({
   return (
     <div
       data-testid="file-uploader-zone"
-      className={`rounded-2xl border-2 border-dashed p-16 flex flex-col items-center justify-center text-center cursor-pointer transition-all ${
-        isDragging
-          ? "border-primary bg-blue-50"
-          : "border-border bg-white hover:border-primary hover:bg-blue-50/40"
+      className={`relative rounded-2xl cursor-pointer transition-all duration-200 ${
+        isDragging ? "scale-[1.01]" : ""
       }`}
+      style={{
+        background: isDragging
+          ? "linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%)"
+          : "white",
+        border: isDragging ? "2px dashed #3b82f6" : "2px dashed #d1d5db",
+        boxShadow: isDragging
+          ? "0 0 0 4px rgba(59,130,246,0.12), 0 8px 30px rgba(0,0,0,0.08)"
+          : "0 4px 20px rgba(0,0,0,0.06)",
+      }}
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -68,26 +74,66 @@ export function FileUploader({
         onChange={handleChange}
         data-testid="file-input"
       />
-      <div className={`w-16 h-16 rounded-full flex items-center justify-center mb-5 transition-colors ${isDragging ? "bg-primary text-white" : "bg-blue-50 text-primary"}`}>
-        <UploadCloud className="w-7 h-7" />
+
+      <div className="flex flex-col items-center justify-center py-20 px-8 text-center">
+        {/* Upload icon */}
+        <div
+          className="w-20 h-20 rounded-2xl flex items-center justify-center mb-6 transition-all"
+          style={{
+            background: isDragging
+              ? "linear-gradient(135deg, #2563eb, #3b82f6)"
+              : "linear-gradient(135deg, #eff6ff, #dbeafe)",
+          }}
+        >
+          <UploadCloud
+            className="w-9 h-9 transition-colors"
+            style={{ color: isDragging ? "white" : "#2563eb" }}
+          />
+        </div>
+
+        <h3 className="text-xl font-bold text-gray-800 mb-2">
+          {isDragging
+            ? "Drop to upload"
+            : multiple
+            ? "Upload your images"
+            : "Upload your image"}
+        </h3>
+        <p className="text-gray-500 text-sm mb-8 max-w-xs leading-relaxed">
+          Drag &amp; drop {multiple ? "files" : "a file"} here, or click to browse.
+          <br />
+          <span className="text-blue-600 font-medium">Files never leave your device.</span>
+        </p>
+
+        {/* Button */}
+        <button
+          data-testid="button-select-file"
+          type="button"
+          className="inline-flex items-center gap-2 px-7 py-3 rounded-xl font-semibold text-sm text-white transition-all hover:opacity-90 active:scale-95"
+          style={{
+            background: "linear-gradient(135deg, #1d4ed8, #3b82f6)",
+            boxShadow: "0 4px 14px rgba(59,130,246,0.4)",
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            inputRef.current?.click();
+          }}
+        >
+          <Plus className="w-4 h-4" />
+          Select {multiple ? "Files" : "File"}
+        </button>
+
+        {/* Supported formats */}
+        <div className="flex items-center gap-2 mt-6">
+          {["JPG", "PNG", "WEBP", "GIF"].map((fmt) => (
+            <span
+              key={fmt}
+              className="px-2.5 py-1 rounded-md text-xs font-medium text-gray-500 bg-gray-100"
+            >
+              {fmt}
+            </span>
+          ))}
+        </div>
       </div>
-      <h3 className="text-lg font-semibold text-foreground mb-1">
-        {multiple ? "Upload your images" : "Upload your image"}
-      </h3>
-      <p className="text-sm text-muted-foreground mb-5 max-w-xs">
-        Drag & drop {multiple ? "files" : "a file"} here, or click to select.{" "}
-        <span className="text-primary font-medium">Your files never leave your device.</span>
-      </p>
-      <Button
-        variant="default"
-        data-testid="button-select-file"
-        onClick={(e) => {
-          e.stopPropagation();
-          inputRef.current?.click();
-        }}
-      >
-        Select {multiple ? "Files" : "File"}
-      </Button>
     </div>
   );
 }

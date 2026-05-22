@@ -42,11 +42,11 @@ export default function ImageCompressor() {
       setCompressedFile(compressed);
 
       recordUse.mutate({
-        id: "2", // image-compressor slug
+        params: { id: "image-compressor" },
         data: {
           fileType: file.type,
-          fileSizeKb: Math.round(compressed.size / 1024)
-        }
+          fileSizeKb: Math.round(compressed.size / 1024),
+        },
       });
       
       toast({ title: "Success", description: "Image compressed successfully." });
