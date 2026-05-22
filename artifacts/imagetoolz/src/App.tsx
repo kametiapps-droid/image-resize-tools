@@ -19,7 +19,7 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={Home} />
+      <Route path="/" component={ImageResizer} />
       <Route path="/tools/image-resizer" component={ImageResizer} />
       <Route path="/tools/image-compressor" component={ImageCompressor} />
       <Route path="/tools/image-converter" component={ImageConverter} />
