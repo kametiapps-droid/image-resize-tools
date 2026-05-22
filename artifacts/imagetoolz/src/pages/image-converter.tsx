@@ -183,7 +183,7 @@ export default function ImageConverter() {
           </div>
 
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-5">
+            <div className="bg-green-50 border border-green-100 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-3">Quick Decision Guide</h3>
               <ul className="space-y-3">
                 {[
@@ -195,7 +195,7 @@ export default function ImageConverter() {
                   { label: "Email photo → JPEG" },
                 ].map((item, i) => (
                   <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
                     {item.label}
                   </li>
                 ))}

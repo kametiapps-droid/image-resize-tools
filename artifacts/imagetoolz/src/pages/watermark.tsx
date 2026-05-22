@@ -228,7 +228,7 @@ export default function Watermark() {
             </article>
           </div>
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-5">
+            <div className="bg-green-50 border border-green-100 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-3">Pro Watermark Tips</h3>
               <ul className="space-y-2.5">
                 {[
@@ -239,7 +239,7 @@ export default function Watermark() {
                   "Place watermarks before sharing — not after",
                 ].map((tip, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                     {tip}
                   </li>
                 ))}

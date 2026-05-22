@@ -7,7 +7,7 @@ export default function Privacy() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center">
               <Shield className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">Privacy Policy</h1>
@@ -22,7 +22,7 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Lock className="w-5 h-5 text-blue-600" />
+              <Lock className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">1. Your Images Stay on Your Device</h2>
             </div>
             <p className="leading-relaxed">
@@ -35,7 +35,7 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Eye className="w-5 h-5 text-blue-600" />
+              <Eye className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">2. Information We Collect</h2>
             </div>
             <p className="leading-relaxed mb-3">
@@ -48,7 +48,7 @@ export default function Privacy() {
                 "Anonymous aggregate analytics to understand which tools are most popular and how we can improve the service.",
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -57,7 +57,7 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Server className="w-5 h-5 text-blue-600" />
+              <Server className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">3. Cookies and Third-Party Services</h2>
             </div>
             <p className="leading-relaxed mb-3">
@@ -69,7 +69,7 @@ export default function Privacy() {
                 "Google Analytics (if enabled): Helps us understand aggregate usage patterns. Data is anonymized and no personal identification is possible.",
               ].map((item, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-blue-500 shrink-0" />
+                  <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-green-500 shrink-0" />
                   <span>{item}</span>
                 </li>
               ))}
@@ -81,7 +81,7 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <UserX className="w-5 h-5 text-blue-600" />
+              <UserX className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">4. Children's Privacy</h2>
             </div>
             <p className="leading-relaxed">
@@ -105,15 +105,15 @@ export default function Privacy() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Mail className="w-5 h-5 text-blue-600" />
+              <Mail className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">7. Contact Us</h2>
             </div>
             <p className="leading-relaxed">
               If you have any questions, concerns, or requests regarding this Privacy Policy or your data, please contact us at:
             </p>
-            <div className="mt-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <div className="mt-3 p-4 bg-green-50 rounded-lg border border-green-100">
               <p className="font-semibold text-gray-900">ImageToolz Support</p>
-              <p className="text-blue-600 mt-1">support@imagetoolz.app</p>
+              <p className="text-green-600 mt-1">support@imagetoolz.app</p>
             </div>
           </section>
 

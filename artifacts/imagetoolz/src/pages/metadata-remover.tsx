@@ -79,8 +79,8 @@ export default function MetadataRemover() {
               <CardContent className="p-12 flex flex-col items-center justify-center bg-muted/20 min-h-[400px] text-center space-y-6">
                 {isProcessing ? (
                   <>
-                    <div className="w-20 h-20 rounded-full bg-blue-100 flex items-center justify-center animate-pulse">
-                      <ShieldCheck className="w-10 h-10 text-blue-600" />
+                    <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center animate-pulse">
+                      <ShieldCheck className="w-10 h-10 text-green-600" />
                     </div>
                     <div>
                       <h3 className="text-xl font-bold mb-2">Removing Metadata...</h3>
@@ -190,7 +190,7 @@ export default function MetadataRemover() {
             </article>
           </div>
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-5">
+            <div className="bg-green-50 border border-green-100 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-3">When to Remove Metadata</h3>
               <ul className="space-y-2.5">
                 {[
@@ -202,7 +202,7 @@ export default function MetadataRemover() {
                   "Before submitting photos to news/media",
                 ].map((tip, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                     {tip}
                   </li>
                 ))}

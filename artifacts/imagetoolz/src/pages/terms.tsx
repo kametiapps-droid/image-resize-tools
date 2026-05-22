@@ -7,7 +7,7 @@ export default function Terms() {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">
         <div className="mb-10">
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-10 h-10 rounded-lg bg-blue-600 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-green-600 flex items-center justify-center">
               <FileText className="w-5 h-5 text-white" />
             </div>
             <h1 className="text-3xl font-bold text-gray-900">Terms of Service</h1>
@@ -22,7 +22,7 @@ export default function Terms() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Globe className="w-5 h-5 text-blue-600" />
+              <Globe className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">1. Acceptance of Terms</h2>
             </div>
             <p className="leading-relaxed">
@@ -39,7 +39,7 @@ export default function Terms() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Ban className="w-5 h-5 text-blue-600" />
+              <Ban className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">3. Acceptable Use</h2>
             </div>
             <p className="leading-relaxed mb-3">You agree to use the Service only for lawful purposes. You may not use ImageToolz to:</p>
@@ -67,7 +67,7 @@ export default function Terms() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <AlertTriangle className="w-5 h-5 text-blue-600" />
+              <AlertTriangle className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">5. Disclaimer of Warranties</h2>
             </div>
             <p className="leading-relaxed">
@@ -77,7 +77,7 @@ export default function Terms() {
 
           <section>
             <div className="flex items-center gap-2 mb-3">
-              <Scale className="w-5 h-5 text-blue-600" />
+              <Scale className="w-5 h-5 text-green-600" />
               <h2 className="text-xl font-bold text-gray-900">6. Limitation of Liability</h2>
             </div>
             <p className="leading-relaxed">
@@ -111,9 +111,9 @@ export default function Terms() {
             <p className="leading-relaxed">
               If you have any questions about these Terms of Service, please contact us:
             </p>
-            <div className="mt-3 p-4 bg-blue-50 rounded-lg border border-blue-100">
+            <div className="mt-3 p-4 bg-green-50 rounded-lg border border-green-100">
               <p className="font-semibold text-gray-900">ImageToolz Support</p>
-              <p className="text-blue-600 mt-1">support@imagetoolz.app</p>
+              <p className="text-green-600 mt-1">support@imagetoolz.app</p>
             </div>
           </section>
 

@@ -156,7 +156,7 @@ export default function ImageToPdf() {
                   { n: "4", t: "Download your PDF", d: "Click 'Download PDF'. The file is generated entirely in your browser using jsPDF and saved instantly." },
                 ].map((step) => (
                   <li key={step.n} className="flex gap-4">
-                    <span className="w-8 h-8 rounded-full bg-blue-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
+                    <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
                     <div>
                       <p className="font-semibold text-gray-900">{step.t}</p>
                       <p className="text-sm text-gray-500 mt-0.5">{step.d}</p>
@@ -195,7 +195,7 @@ export default function ImageToPdf() {
             </article>
           </div>
           <div className="space-y-6">
-            <div className="bg-blue-50 border border-blue-100 rounded-xl p-5">
+            <div className="bg-green-50 border border-green-100 rounded-xl p-5">
               <h3 className="font-semibold text-gray-900 mb-3">Tips for Best Results</h3>
               <ul className="space-y-2.5">
                 {[
@@ -206,7 +206,7 @@ export default function ImageToPdf() {
                   "Compress large photos first for smaller PDF files",
                 ].map((tip, i) => (
                   <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                    <CheckCircle2 className="w-4 h-4 text-blue-500 shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
                     {tip}
                   </li>
                 ))}
