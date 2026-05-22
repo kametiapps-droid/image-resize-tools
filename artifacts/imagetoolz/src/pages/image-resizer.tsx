@@ -88,11 +88,11 @@ export default function ImageResizer() {
       });
 
       recordUse.mutate({
-        id: "1", // using dummy id if needed or map to slug
+        params: { id: "image-resizer" },
         data: {
           fileType: file.type,
-          fileSizeKb: Math.round(file.size / 1024)
-        }
+          fileSizeKb: Math.round(file.size / 1024),
+        },
       });
       setIsProcessing(false);
     }, format, 0.9);
