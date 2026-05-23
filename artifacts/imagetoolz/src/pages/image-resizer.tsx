@@ -1,265 +1,454 @@
 import { useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import { ToolLayout } from "@/components/tool-layout";
 import { FileUploader } from "@/components/file-uploader";
+import { UploadLoading, ProcessingAnimation, DownloadDone } from "@/components/tool-steps";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Switch } from "@/components/ui/switch";
+import { Slider } from "@/components/ui/slider";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Download, RefreshCw, CheckCircle2 } from "lucide-react";
+import { RefreshCw, CheckCircle2, Lock, Unlock } from "lucide-react";
 import { useRecordToolUse } from "@workspace/api-client-react";
-import { useToast } from "@/hooks/use-toast";
+
+type Step = "idle" | "loading" | "settings" | "processing" | "done";
+
+const PRESETS = {
+  social: [
+    { name: "Instagram Post", w: 1080, h: 1080 },
+    { name: "Instagram Story", w: 1080, h: 1920 },
+    { name: "Instagram Landscape", w: 1080, h: 566 },
+    { name: "Twitter/X Post", w: 1200, h: 675 },
+    { name: "Twitter/X Header", w: 1500, h: 500 },
+    { name: "YouTube Thumbnail", w: 1280, h: 720 },
+    { name: "Facebook Cover", w: 851, h: 315 },
+    { name: "Facebook Post", w: 1200, h: 630 },
+    { name: "LinkedIn Post", w: 1200, h: 628 },
+    { name: "LinkedIn Banner", w: 1584, h: 396 },
+    { name: "WhatsApp DP", w: 500, h: 500 },
+    { name: "TikTok Video", w: 1080, h: 1920 },
+  ],
+  web: [
+    { name: "HD 1080p", w: 1920, h: 1080 },
+    { name: "4K UHD", w: 3840, h: 2160 },
+    { name: "Website Banner", w: 1440, h: 600 },
+    { name: "Blog Header", w: 1200, h: 630 },
+    { name: "Email Header", w: 600, h: 200 },
+    { name: "MacBook Wallpaper", w: 2560, h: 1600 },
+    { name: "Favicon", w: 32, h: 32 },
+    { name: "OG Image", w: 1200, h: 630 },
+  ],
+  print: [
+    { name: "A4 (150 DPI)", w: 1240, h: 1754 },
+    { name: "US Letter (150 DPI)", w: 1275, h: 1650 },
+    { name: "Business Card", w: 1050, h: 600 },
+    { name: "Passport Photo", w: 600, h: 600 },
+    { name: "A3 Poster (150 DPI)", w: 1754, h: 2480 },
+  ],
+};
+
+type PresetTab = "social" | "web" | "print" | "custom";
 
 export default function ImageResizer() {
+  const [step, setStep] = useState<Step>("idle");
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
-  const [width, setWidth] = useState<number>(0);
-  const [height, setHeight] = useState<number>(0);
-  const [maintainRatio, setMaintainRatio] = useState(true);
+  const [origW, setOrigW] = useState(0);
+  const [origH, setOrigH] = useState(0);
+  const [width, setWidth] = useState(0);
+  const [height, setHeight] = useState(0);
+  const [ratio, setRatio] = useState(1);
+  const [lockRatio, setLockRatio] = useState(true);
   const [format, setFormat] = useState("image/jpeg");
-  const [aspectRatio, setAspectRatio] = useState(1);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [quality, setQuality] = useState(90);
+  const [activeTab, setActiveTab] = useState<PresetTab>("social");
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [resultBlob, setResultBlob] = useState<Blob | null>(null);
+  const [resultInfo, setResultInfo] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const { toast } = useToast();
   const recordUse = useRecordToolUse();
 
   const handleUpload = (files: File[]) => {
-    if (files.length === 0) return;
-    const selected = files[0];
-    setFile(selected);
-    const url = URL.createObjectURL(selected);
+    if (!files.length) return;
+    const f = files[0];
+    setFile(f);
+    setStep("loading");
+    const url = URL.createObjectURL(f);
     setPreviewUrl(url);
     const img = new Image();
     img.onload = () => {
+      setOrigW(img.width);
+      setOrigH(img.height);
       setWidth(img.width);
       setHeight(img.height);
-      setAspectRatio(img.width / img.height);
+      setRatio(img.width / img.height);
       imageRef.current = img;
+      setTimeout(() => setStep("settings"), 900);
     };
     img.src = url;
   };
 
+  const applyPreset = (w: number, h: number) => {
+    setWidth(w);
+    setHeight(h);
+    if (lockRatio) setRatio(w / h);
+  };
+
   const handleWidthChange = (val: string) => {
-    const num = parseInt(val) || 0;
-    setWidth(num);
-    if (maintainRatio && aspectRatio) setHeight(Math.round(num / aspectRatio));
+    const n = parseInt(val) || 0;
+    setWidth(n);
+    if (lockRatio && ratio) setHeight(Math.round(n / ratio));
   };
 
   const handleHeightChange = (val: string) => {
-    const num = parseInt(val) || 0;
-    setHeight(num);
-    if (maintainRatio && aspectRatio) setWidth(Math.round(num * aspectRatio));
+    const n = parseInt(val) || 0;
+    setHeight(n);
+    if (lockRatio && ratio) setWidth(Math.round(n * ratio));
   };
 
   const processImage = () => {
-    if (!imageRef.current || !canvasRef.current || !file) return;
-    setIsProcessing(true);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    canvas.width = width;
-    canvas.height = height;
-    ctx.drawImage(imageRef.current, 0, 0, width, height);
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const ext = format.split("/")[1];
-      a.download = `resized-${file.name.split(".")[0]}.${ext}`;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast({ title: "Success", description: "Image resized and downloaded." });
-      recordUse.mutate({ params: { id: "image-resizer" }, data: { fileType: file.type, fileSizeKb: Math.round(file.size / 1024) } });
-      setIsProcessing(false);
-    }, format, 0.9);
+    if (!imageRef.current || !canvasRef.current || !file || !width || !height) return;
+    setStep("processing");
+    setTimeout(() => {
+      const canvas = canvasRef.current!;
+      const ctx = canvas.getContext("2d")!;
+      canvas.width = width;
+      canvas.height = height;
+      ctx.imageSmoothingEnabled = true;
+      ctx.imageSmoothingQuality = "high";
+      ctx.drawImage(imageRef.current!, 0, 0, width, height);
+      const q = format === "image/png" ? 1 : quality / 100;
+      canvas.toBlob((blob) => {
+        if (!blob) { setStep("settings"); return; }
+        const url = URL.createObjectURL(blob);
+        setResultUrl(url);
+        setResultBlob(blob);
+        const ext = format === "image/jpeg" ? "jpg" : format.split("/")[1];
+        const kb = Math.round(blob.size / 1024);
+        const sizeStr = kb > 1024 ? `${(kb / 1024).toFixed(1)} MB` : `${kb} KB`;
+        setResultInfo(`${width} × ${height} px · ${ext.toUpperCase()} · ${sizeStr}`);
+        recordUse.mutate({ params: { id: "image-resizer" }, data: { fileType: format, fileSizeKb: kb } });
+        setStep("done");
+      }, format, q);
+    }, 100);
   };
 
+  const handleDownload = () => {
+    if (!resultBlob || !file) return;
+    const ext = format === "image/jpeg" ? "jpg" : format.split("/")[1];
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(resultBlob);
+    a.download = `resized-${file.name.split(".")[0]}.${ext}`;
+    a.click();
+  };
+
+  const reset = () => {
+    setStep("idle");
+    setFile(null);
+    setPreviewUrl(null);
+    setResultUrl(null);
+    setResultBlob(null);
+    setResultInfo("");
+    imageRef.current = null;
+  };
+
+  const tabLabels: { key: PresetTab; label: string }[] = [
+    { key: "social", label: "Social Media" },
+    { key: "web", label: "Web & Desktop" },
+    { key: "print", label: "Print" },
+    { key: "custom", label: "Custom" },
+  ];
+
   return (
-    <ToolLayout toolId="image-resizer" title="Image Resizer" description="Change the dimensions of your image instantly — no quality loss, no upload required." badge="Most Popular">
-      {!file ? (
-        <FileUploader onUpload={handleUpload} />
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <Card>
-              <CardContent className="p-4 flex flex-col items-center justify-center bg-muted/20 min-h-[400px]">
-                {previewUrl && (
-                  <img src={previewUrl} alt="Preview" className="max-w-full max-h-[500px] object-contain shadow-sm border border-border rounded-md" />
-                )}
-                <canvas ref={canvasRef} className="hidden" />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6 space-y-6">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <Label className="text-base font-semibold">Dimensions</Label>
-                    <div className="flex items-center space-x-2">
-                      <Switch id="maintain-ratio" checked={maintainRatio} onCheckedChange={setMaintainRatio} />
-                      <Label htmlFor="maintain-ratio" className="text-xs text-muted-foreground">Lock Ratio</Label>
-                    </div>
+    <>
+      <Helmet>
+        <title>Free Image Resizer - Resize Images Instantly | CropImages</title>
+        <meta name="description" content="Resize images online for free. Set exact pixel dimensions, use social media presets (Instagram, YouTube, Twitter), lock aspect ratio, choose format and quality. 100% browser-based." />
+        <link rel="canonical" href="https://cropimages.store/" />
+      </Helmet>
+      <ToolLayout
+        toolId="image-resizer"
+        title="Image Resizer"
+        description="Resize images to any dimension instantly — social media presets, custom sizes, quality control. Free & private."
+        badge="Most Popular"
+        pageTitle="Image Resizer"
+      >
+        <canvas ref={canvasRef} className="hidden" />
+
+        {step === "idle" && <FileUploader onUpload={handleUpload} />}
+        {step === "loading" && <UploadLoading filename={file?.name} />}
+        {step === "processing" && <ProcessingAnimation label={`Resizing to ${width} × ${height} px…`} />}
+
+        {step === "done" && (
+          <DownloadDone
+            resultUrl={resultUrl}
+            resultBlob={resultBlob}
+            filename={`resized-${file?.name?.split(".")[0] ?? "image"}.${format === "image/jpeg" ? "jpg" : format.split("/")[1]}`}
+            info={resultInfo}
+            toolName="Image Resizer"
+            toolPath="/"
+            onReset={reset}
+            onDownload={handleDownload}
+          />
+        )}
+
+        {step === "settings" && (
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
+            {/* Preview */}
+            <div className="lg:col-span-3">
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="bg-[url('data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20width%3D%2216%22%20height%3D%2216%22%3E%3Crect%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%23f3f4f6%22/%3E%3Crect%20x%3D%228%22%20y%3D%228%22%20width%3D%228%22%20height%3D%228%22%20fill%3D%22%23f3f4f6%22/%3E%3C/svg%3E')] min-h-[320px] flex items-center justify-center p-4">
+                    {previewUrl && (
+                      <img src={previewUrl} alt="Preview" className="max-w-full max-h-[440px] object-contain rounded shadow-sm" />
+                    )}
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label>Width (px)</Label>
-                      <Input type="number" value={width || ""} onChange={(e) => handleWidthChange(e.target.value)} />
-                    </div>
-                    <div className="space-y-2">
-                      <Label>Height (px)</Label>
-                      <Input type="number" value={height || ""} onChange={(e) => handleHeightChange(e.target.value)} />
-                    </div>
+                  <div className="px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
+                    <span>Original: <strong className="text-gray-700 dark:text-gray-200">{origW} × {origH} px</strong></span>
+                    <span>→ Output: <strong className="text-green-600 dark:text-green-400">{width || "—"} × {height || "—"} px</strong></span>
                   </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Output Format</Label>
-                  <Select value={format} onValueChange={setFormat}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="image/jpeg">JPEG</SelectItem>
-                      <SelectItem value="image/png">PNG</SelectItem>
-                      <SelectItem value="image/webp">WEBP</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button className="w-full" size="lg" onClick={processImage} disabled={isProcessing || !width || !height}>
-                  <Download className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Processing..." : "Download Resized Image"}
-                </Button>
-                <Button variant="outline" className="w-full" onClick={() => { setFile(null); setPreviewUrl(null); }}>
-                  <RefreshCw className="w-4 h-4 mr-2" /> Start Over
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      )}
+                </CardContent>
+              </Card>
+            </div>
 
-      {/* Article Guide */}
-      <div className="mt-14 space-y-10">
-        <div className="border-t border-gray-200 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">How to Resize an Image Online — Complete Guide</h2>
-          <p className="text-gray-500 text-sm mb-8">Learn everything about image resizing, dimensions, aspect ratios, and best practices for web, print, and social media.</p>
-
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-8">
-              <article className="prose prose-gray max-w-none">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">What Is Image Resizing?</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Image resizing is the process of changing the pixel dimensions (width and height) of an image. Whether you need to shrink a large photo for email, scale up an image for a poster, or hit exact pixel requirements for a social media platform, resizing is one of the most common image editing tasks.
-                </p>
-                <p className="text-gray-600 leading-relaxed mt-3">
-                  Our Image Resizer tool uses the browser's native Canvas API to redraw your image at the new dimensions. This means processing is instant, runs entirely on your device, and produces high-quality output — no server upload needed.
-                </p>
-              </article>
-
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Step-by-Step: How to Use the Image Resizer</h3>
-                <ol className="space-y-3">
-                  {[
-                    { n: "1", t: "Upload your image", d: "Drag and drop a JPG, PNG, WEBP, or GIF file into the upload area, or click 'Select File' to browse." },
-                    { n: "2", t: "Set your target dimensions", d: "Enter the width and height in pixels. Enable 'Lock Ratio' to automatically maintain the aspect ratio as you type." },
-                    { n: "3", t: "Choose an output format", d: "Select JPEG for photos (smaller file), PNG for graphics with transparency, or WEBP for the best compression." },
-                    { n: "4", t: "Download your resized image", d: "Click 'Download Resized Image'. The file is processed in your browser and saved directly to your device." },
-                  ].map((step) => (
-                    <li key={step.n} className="flex gap-4">
-                      <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
-                      <div>
-                        <p className="font-semibold text-gray-900">{step.t}</p>
-                        <p className="text-sm text-gray-500 mt-0.5">{step.d}</p>
-                      </div>
-                    </li>
-                  ))}
-                </ol>
-              </article>
-
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Common Image Size Presets</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
-                    <thead>
-                      <tr className="bg-gray-50 border border-gray-200">
-                        <th className="text-left px-4 py-2 font-semibold text-gray-700 border-r border-gray-200">Platform / Use Case</th>
-                        <th className="text-left px-4 py-2 font-semibold text-gray-700 border-r border-gray-200">Width × Height</th>
-                        <th className="text-left px-4 py-2 font-semibold text-gray-700">Format</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ["Instagram Post", "1080 × 1080 px", "JPEG"],
-                        ["Twitter / X Header", "1500 × 500 px", "JPEG"],
-                        ["Facebook Cover Photo", "851 × 315 px", "JPEG"],
-                        ["LinkedIn Profile Photo", "400 × 400 px", "JPEG/PNG"],
-                        ["YouTube Thumbnail", "1280 × 720 px", "JPEG"],
-                        ["Standard HD Wallpaper", "1920 × 1080 px", "JPEG/PNG"],
-                        ["Email Signature Image", "600 × 150 px", "PNG"],
-                        ["Website Hero Banner", "1440 × 600 px", "WEBP"],
-                      ].map(([name, size, fmt], i) => (
-                        <tr key={i} className={`border border-gray-200 ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`}>
-                          <td className="px-4 py-2 text-gray-700 border-r border-gray-200">{name}</td>
-                          <td className="px-4 py-2 font-mono text-gray-600 border-r border-gray-200">{size}</td>
-                          <td className="px-4 py-2 text-gray-500">{fmt}</td>
-                        </tr>
+            {/* Controls */}
+            <div className="lg:col-span-2 space-y-4">
+              {/* Preset tabs */}
+              <Card>
+                <CardContent className="p-4 space-y-3">
+                  <Label className="text-sm font-semibold">Size Presets</Label>
+                  <div className="flex gap-1 flex-wrap">
+                    {tabLabels.map((t) => (
+                      <button
+                        key={t.key}
+                        onClick={() => setActiveTab(t.key)}
+                        className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                          activeTab === t.key
+                            ? "bg-green-600 text-white"
+                            : "bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-950/40 hover:text-green-700 dark:hover:text-green-400"
+                        }`}
+                      >
+                        {t.label}
+                      </button>
+                    ))}
+                  </div>
+                  {activeTab !== "custom" && (
+                    <div className="grid grid-cols-1 gap-1 max-h-52 overflow-y-auto pr-1">
+                      {PRESETS[activeTab].map((p) => (
+                        <button
+                          key={p.name}
+                          onClick={() => applyPreset(p.w, p.h)}
+                          className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs transition-all text-left ${
+                            width === p.w && height === p.h
+                              ? "bg-green-50 dark:bg-green-950/40 text-green-700 dark:text-green-400 font-semibold border border-green-200 dark:border-green-700"
+                              : "hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300"
+                          }`}
+                        >
+                          <span>{p.name}</span>
+                          <span className="font-mono text-gray-400 dark:text-gray-500">{p.w}×{p.h}</span>
+                        </button>
                       ))}
-                    </tbody>
-                  </table>
-                </div>
-              </article>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
 
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Understanding Aspect Ratios</h3>
-                <p className="text-gray-600 leading-relaxed">
-                  An aspect ratio is the proportional relationship between an image's width and height. For example, a 1920×1080 image has a 16:9 aspect ratio. When you resize an image and the "Lock Ratio" option is enabled, the tool automatically calculates the other dimension to maintain the original proportions — preventing distortion.
-                </p>
-                <p className="text-gray-600 leading-relaxed mt-3">
-                  Common aspect ratios: <strong>1:1</strong> (square, Instagram), <strong>4:3</strong> (traditional photo), <strong>16:9</strong> (widescreen, YouTube, HD), <strong>9:16</strong> (vertical/portrait, Stories), <strong>3:2</strong> (DSLR photos).
-                </p>
-              </article>
+              {/* Custom dimensions */}
+              <Card>
+                <CardContent className="p-4 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <Label className="text-sm font-semibold">Dimensions (px)</Label>
+                    <button
+                      onClick={() => setLockRatio(!lockRatio)}
+                      className={`flex items-center gap-1 px-2 py-1 rounded-md text-xs font-medium transition-all ${
+                        lockRatio ? "bg-green-100 dark:bg-green-950/40 text-green-700 dark:text-green-400" : "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                      }`}
+                    >
+                      {lockRatio ? <Lock className="w-3 h-3" /> : <Unlock className="w-3 h-3" />}
+                      {lockRatio ? "Locked" : "Unlock"}
+                    </button>
+                  </div>
+                  <div className="grid grid-cols-2 gap-3">
+                    <div className="space-y-1">
+                      <Label className="text-xs text-gray-500 dark:text-gray-400">Width</Label>
+                      <Input
+                        type="number" min={1} max={8000}
+                        value={width || ""}
+                        onChange={(e) => handleWidthChange(e.target.value)}
+                        className="h-9 text-sm"
+                      />
+                    </div>
+                    <div className="space-y-1">
+                      <Label className="text-xs text-gray-500 dark:text-gray-400">Height</Label>
+                      <Input
+                        type="number" min={1} max={8000}
+                        value={height || ""}
+                        onChange={(e) => handleHeightChange(e.target.value)}
+                        className="h-9 text-sm"
+                      />
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Format & Quality */}
+              <Card>
+                <CardContent className="p-4 space-y-3">
+                  <div className="space-y-1.5">
+                    <Label className="text-sm font-semibold">Output Format</Label>
+                    <Select value={format} onValueChange={setFormat}>
+                      <SelectTrigger className="h-9 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="image/jpeg">JPEG — Best for photos</SelectItem>
+                        <SelectItem value="image/png">PNG — Lossless / Transparency</SelectItem>
+                        <SelectItem value="image/webp">WEBP — Smallest file size</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  {format !== "image/png" && (
+                    <div className="space-y-2">
+                      <div className="flex items-center justify-between">
+                        <Label className="text-sm">Quality</Label>
+                        <span className="text-sm font-semibold text-green-600 dark:text-green-400">{quality}%</span>
+                      </div>
+                      <Slider
+                        value={[quality]}
+                        min={30} max={100} step={1}
+                        onValueChange={(v) => setQuality(v[0])}
+                      />
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
+                        {quality >= 85 ? "High quality · Larger file" : quality >= 65 ? "Good balance · Recommended" : "Smaller file · Some quality loss"}
+                      </p>
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+
+              {/* Resize button */}
+              <button
+                onClick={processImage}
+                disabled={!width || !height}
+                className="w-full py-4 rounded-xl font-bold text-base text-white transition-all hover:opacity-90 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                style={{
+                  background: "linear-gradient(135deg, #15803d, #16a34a)",
+                  boxShadow: "0 4px 16px rgba(22,163,74,0.4)",
+                }}
+              >
+                Resize Image
+              </button>
+
+              <Button variant="outline" size="sm" className="w-full" onClick={reset}>
+                <RefreshCw className="w-3.5 h-3.5 mr-2" /> Start Over
+              </Button>
             </div>
+          </div>
+        )}
 
-            <div className="space-y-6">
-              <div className="bg-green-50 border border-green-100 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3">Quick Tips</h3>
-                <ul className="space-y-2.5">
-                  {[
-                    "Always keep 'Lock Ratio' on to avoid stretching",
-                    "Use WEBP for web — 30% smaller than JPEG",
-                    "Use PNG for logos, screenshots, and images with text",
-                    "Upscaling degrades quality — resize down, not up",
-                    "For print: 300 DPI is standard (multiply inch × 300 for pixels)",
-                  ].map((tip, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                      {tip}
-                    </li>
-                  ))}
-                </ul>
+        {/* Article */}
+        <div className="mt-14 space-y-10">
+          <div className="border-t border-gray-200 dark:border-gray-700 pt-10">
+            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">How to Resize an Image Online — Complete Guide</h2>
+            <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">Learn everything about image resizing, dimensions, aspect ratios, and best practices for web, print, and social media.</p>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-8">
+                <article>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Step-by-Step: How to Use the Image Resizer</h3>
+                  <ol className="space-y-3">
+                    {[
+                      { n: "1", t: "Upload your image", d: "Drag & drop a JPG, PNG, WEBP, or GIF file — or click Select File to browse. Your image never leaves your device." },
+                      { n: "2", t: "Choose a preset or enter custom dimensions", d: "Pick from 25+ presets for Instagram, YouTube, Twitter, print, web — or enter exact width × height in pixels." },
+                      { n: "3", t: "Set quality and format", d: "Choose JPEG, PNG, or WEBP. Adjust the quality slider from 30–100%. WEBP gives the smallest file; PNG is lossless." },
+                      { n: "4", t: "Click Resize Image", d: "The browser processes the image instantly and shows a download card. Click Download to save." },
+                      { n: "5", t: "Share or resize another", d: "Share the tool with friends via WhatsApp, Twitter, or Facebook — or click Reset to process another image." },
+                    ].map((step) => (
+                      <li key={step.n} className="flex gap-4">
+                        <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
+                        <div>
+                          <p className="font-semibold text-gray-900 dark:text-white">{step.t}</p>
+                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{step.d}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ol>
+                </article>
+
+                <article>
+                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Social Media Image Size Guide 2026</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full text-sm border-collapse">
+                      <thead>
+                        <tr className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
+                          <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-200 dark:border-gray-600">Platform</th>
+                          <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-200 dark:border-gray-600">Size (px)</th>
+                          <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Format</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {[
+                          ["Instagram Post (Square)", "1080 × 1080", "JPEG"],
+                          ["Instagram Story / Reel", "1080 × 1920", "JPEG"],
+                          ["Twitter/X Post", "1200 × 675", "JPEG/WEBP"],
+                          ["YouTube Thumbnail", "1280 × 720", "JPEG"],
+                          ["Facebook Cover", "851 × 315", "JPEG"],
+                          ["LinkedIn Post", "1200 × 628", "JPEG"],
+                          ["WhatsApp Profile Photo", "500 × 500", "JPEG/PNG"],
+                          ["TikTok Video Thumbnail", "1080 × 1920", "JPEG"],
+                        ].map(([name, size, fmt], i) => (
+                          <tr key={i} className={`border border-gray-200 dark:border-gray-600 ${i % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50/50 dark:bg-gray-800/50"}`}>
+                            <td className="px-4 py-2 text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-600">{name}</td>
+                            <td className="px-4 py-2 font-mono text-gray-600 dark:text-gray-400 border-r border-gray-200 dark:border-gray-600">{size}</td>
+                            <td className="px-4 py-2 text-gray-500 dark:text-gray-400">{fmt}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </article>
               </div>
 
-              <div className="bg-white border border-gray-200 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 mb-3">Frequently Asked Questions</h3>
-                <div className="space-y-4">
-                  {[
-                    { q: "Does resizing reduce quality?", a: "Reducing size is lossless in PNG and near-lossless in JPEG. Enlarging always reduces sharpness." },
-                    { q: "What's the maximum image size?", a: "There's no enforced limit — your browser's memory is the only constraint." },
-                    { q: "Is my image uploaded anywhere?", a: "No. All processing is done in your browser. Your image never leaves your device." },
-                    { q: "Can I resize animated GIFs?", a: "The Canvas API only captures the first frame of a GIF. For animated GIFs, use a dedicated GIF tool." },
-                  ].map((faq, i) => (
-                    <div key={i}>
-                      <p className="text-sm font-semibold text-gray-800">{faq.q}</p>
-                      <p className="text-xs text-gray-500 mt-1 leading-relaxed">{faq.a}</p>
-                    </div>
-                  ))}
+              <div className="space-y-6">
+                <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Pro Tips</h3>
+                  <ul className="space-y-2.5">
+                    {[
+                      "Lock aspect ratio to avoid distortion",
+                      "Use WEBP for web — 30% smaller than JPEG",
+                      "PNG for logos and images with text",
+                      "85–90% JPEG quality is ideal for photos",
+                      "Downscale only — upscaling reduces sharpness",
+                    ].map((tip, i) => (
+                      <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
+                        <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
+                        {tip}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
+                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">FAQ</h3>
+                  <div className="space-y-4">
+                    {[
+                      { q: "Does resizing reduce quality?", a: "Reducing size is near-lossless in JPEG and lossless in PNG. Enlarging always reduces sharpness." },
+                      { q: "Is my image uploaded anywhere?", a: "No. All processing is done in your browser using the Canvas API. Your image never leaves your device." },
+                      { q: "What is the maximum image size?", a: "There's no enforced limit — your browser's available RAM is the only constraint." },
+                    ].map((faq, i) => (
+                      <div key={i}>
+                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{faq.q}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{faq.a}</p>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
-    </ToolLayout>
+      </ToolLayout>
+    </>
   );
 }

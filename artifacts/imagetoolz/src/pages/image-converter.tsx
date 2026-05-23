@@ -1,225 +1,174 @@
 import { useState, useRef } from "react";
+import { Helmet } from "react-helmet-async";
 import { ToolLayout } from "@/components/tool-layout";
 import { FileUploader } from "@/components/file-uploader";
+import { UploadLoading, ProcessingAnimation, DownloadDone } from "@/components/tool-steps";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Download, RefreshCw, CheckCircle2 } from "lucide-react";
+import { RefreshCw, CheckCircle2 } from "lucide-react";
 import { useRecordToolUse } from "@workspace/api-client-react";
-import { useToast } from "@/hooks/use-toast";
+
+type Step = "idle" | "loading" | "settings" | "processing" | "done";
 
 const formats = [
-  { value: "image/jpeg", label: "JPEG (.jpg)", desc: "Best for photos. Smaller file, slight quality loss." },
-  { value: "image/png", label: "PNG (.png)", desc: "Lossless. Best for graphics, screenshots, transparency." },
-  { value: "image/webp", label: "WEBP (.webp)", desc: "Best for web. Smaller than JPEG and PNG." },
-  { value: "image/gif", label: "GIF (.gif)", desc: "256 colors only. Best for simple animations." },
+  { value: "image/jpeg", label: "JPEG", ext: "jpg", desc: "Best for photos. Smaller file, slight quality loss.", color: "bg-orange-50 dark:bg-orange-950/30 border-orange-200 dark:border-orange-800 text-orange-700 dark:text-orange-400" },
+  { value: "image/png", label: "PNG", ext: "png", desc: "Lossless. Best for graphics, screenshots, transparency.", color: "bg-blue-50 dark:bg-blue-950/30 border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-400" },
+  { value: "image/webp", label: "WEBP", ext: "webp", desc: "Best for web. Smaller than JPEG and PNG.", color: "bg-green-50 dark:bg-green-950/30 border-green-200 dark:border-green-800 text-green-700 dark:text-green-400" },
+  { value: "image/gif", label: "GIF", ext: "gif", desc: "256 colors only. Best for simple graphics.", color: "bg-purple-50 dark:bg-purple-950/30 border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400" },
 ];
 
 export default function ImageConverter() {
+  const [step, setStep] = useState<Step>("idle");
   const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [format, setFormat] = useState("image/png");
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [resultUrl, setResultUrl] = useState<string | null>(null);
+  const [resultBlob, setResultBlob] = useState<Blob | null>(null);
+  const [resultInfo, setResultInfo] = useState("");
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const imageRef = useRef<HTMLImageElement | null>(null);
-  const { toast } = useToast();
   const recordUse = useRecordToolUse();
 
   const handleUpload = (files: File[]) => {
-    if (files.length === 0) return;
-    const selected = files[0];
-    setFile(selected);
-    const url = URL.createObjectURL(selected);
+    if (!files.length) return;
+    const f = files[0];
+    setFile(f);
+    setStep("loading");
+    const url = URL.createObjectURL(f);
     setPreviewUrl(url);
     const img = new Image();
-    img.onload = () => { imageRef.current = img; };
+    img.onload = () => { imageRef.current = img; setTimeout(() => setStep("settings"), 900); };
     img.src = url;
   };
 
   const processImage = () => {
     if (!imageRef.current || !canvasRef.current || !file) return;
-    setIsProcessing(true);
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-    canvas.width = imageRef.current.width;
-    canvas.height = imageRef.current.height;
-    ctx.drawImage(imageRef.current, 0, 0);
-    canvas.toBlob((blob) => {
-      if (!blob) return;
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      const ext = format === "image/jpeg" ? "jpg" : format.split("/")[1];
-      a.download = `converted-${file.name.split(".")[0]}.${ext}`;
-      a.click();
-      URL.revokeObjectURL(url);
-      toast({ title: "Success", description: "Image converted and downloaded." });
-      recordUse.mutate({ params: { id: "image-converter" }, data: { fileType: format, fileSizeKb: Math.round(blob.size / 1024) } });
-      setIsProcessing(false);
-    }, format, 0.92);
+    setStep("processing");
+    setTimeout(() => {
+      const canvas = canvasRef.current!;
+      const ctx = canvas.getContext("2d")!;
+      canvas.width = imageRef.current!.width;
+      canvas.height = imageRef.current!.height;
+      if (format === "image/jpeg") { ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, canvas.width, canvas.height); }
+      ctx.drawImage(imageRef.current!, 0, 0);
+      canvas.toBlob((blob) => {
+        if (!blob) { setStep("settings"); return; }
+        const url = URL.createObjectURL(blob);
+        setResultUrl(url);
+        setResultBlob(blob);
+        const sel = formats.find(f => f.value === format)!;
+        const kb = Math.round(blob.size / 1024);
+        setResultInfo(`${sel.label} · ${canvas.width} × ${canvas.height} px · ${kb > 1024 ? `${(kb/1024).toFixed(1)} MB` : `${kb} KB`}`);
+        recordUse.mutate({ params: { id: "image-converter" }, data: { fileType: format, fileSizeKb: kb } });
+        setStep("done");
+      }, format, 0.92);
+    }, 100);
   };
 
-  const selectedFormat = formats.find((f) => f.value === format);
+  const reset = () => { setStep("idle"); setFile(null); setPreviewUrl(null); setResultUrl(null); setResultBlob(null); imageRef.current = null; };
+
+  const selectedFmt = formats.find(f => f.value === format)!;
 
   return (
-    <ToolLayout toolId="image-converter" title="Image Converter" description="Convert images between JPEG, PNG, WEBP, and GIF instantly in your browser.">
-      {!file ? (
-        <FileUploader onUpload={handleUpload} />
-      ) : (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2">
-            <Card>
-              <CardContent className="p-4 flex flex-col items-center justify-center bg-muted/20 min-h-[400px]">
-                {previewUrl && (
-                  <img src={previewUrl} alt="Preview" className="max-w-full max-h-[500px] object-contain shadow-sm border border-border rounded-md" />
-                )}
-                <canvas ref={canvasRef} className="hidden" />
-              </CardContent>
-            </Card>
-          </div>
-          <div className="space-y-6">
-            <Card>
-              <CardContent className="p-6 space-y-6">
-                <div className="space-y-2">
-                  <Label className="text-base font-semibold">Output Format</Label>
-                  <Select value={format} onValueChange={setFormat}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
-                    <SelectContent>
-                      {formats.map((f) => (
-                        <SelectItem key={f.value} value={f.value}>{f.label}</SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {selectedFormat && (
-                    <p className="text-xs text-muted-foreground mt-1">{selectedFormat.desc}</p>
-                  )}
-                </div>
+    <>
+      <Helmet>
+        <title>Free Image Converter - Convert JPEG PNG WEBP GIF Online | CropImages</title>
+        <meta name="description" content="Convert images between JPEG, PNG, WEBP, and GIF formats online for free. Instant browser-based conversion — no upload, no signup required." />
+        <link rel="canonical" href="https://cropimages.store/tools/image-converter" />
+      </Helmet>
+      <ToolLayout toolId="image-converter" title="Image Converter" description="Convert between JPEG, PNG, WEBP, and GIF — instantly in your browser, no upload needed." pageTitle="Image Converter">
+        <canvas ref={canvasRef} className="hidden" />
 
-                <div className="p-3 bg-muted/30 rounded-lg text-sm space-y-1">
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Original format:</span>
-                    <span className="font-medium text-foreground">{file.type.split("/")[1].toUpperCase()}</span>
+        {step === "idle" && <FileUploader onUpload={handleUpload} />}
+        {step === "loading" && <UploadLoading filename={file?.name} />}
+        {step === "processing" && <ProcessingAnimation label={`Converting to ${selectedFmt.label}…`} />}
+
+        {step === "done" && (
+          <DownloadDone
+            resultUrl={resultUrl}
+            resultBlob={resultBlob}
+            filename={`converted-${(file?.name ?? "image").split(".")[0]}.${selectedFmt.ext}`}
+            info={resultInfo}
+            toolName="Image Converter"
+            toolPath="/tools/image-converter"
+            onReset={reset}
+          />
+        )}
+
+        {step === "settings" && (
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <Card className="overflow-hidden">
+                <CardContent className="p-0">
+                  <div className="min-h-[320px] bg-gray-50 dark:bg-gray-800 flex items-center justify-center p-4">
+                    {previewUrl && <img src={previewUrl} alt="Preview" className="max-w-full max-h-[420px] object-contain rounded shadow-sm" />}
                   </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>File size:</span>
-                    <span className="font-medium text-foreground">{(file.size / 1024).toFixed(1)} KB</span>
+                  <div className="px-4 py-2.5 bg-gray-50 dark:bg-gray-800 border-t border-gray-100 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400">
+                    Original format: <strong className="text-gray-700 dark:text-gray-200">{file?.type?.split("/")[1]?.toUpperCase() ?? "Unknown"}</strong>
+                    <span className="mx-2">→</span>
+                    Output: <strong className="text-green-600 dark:text-green-400">{selectedFmt.label}</strong>
                   </div>
-                </div>
+                </CardContent>
+              </Card>
+            </div>
 
-                <Button className="w-full" size="lg" onClick={processImage} disabled={isProcessing}>
-                  <Download className="w-4 h-4 mr-2" />
-                  {isProcessing ? "Converting..." : "Convert & Download"}
-                </Button>
-                <Button variant="outline" className="w-full" onClick={() => { setFile(null); setPreviewUrl(null); }}>
-                  <RefreshCw className="w-4 h-4 mr-2" /> Start Over
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      )}
-
-      {/* Article Guide */}
-      <div className="mt-14 border-t border-gray-200 pt-10 space-y-8">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Image Format Conversion Guide — JPEG vs PNG vs WEBP vs GIF</h2>
-          <p className="text-gray-500 text-sm mb-8">Understand when to use each image format and how to convert between them for optimal quality and file size.</p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          <div className="lg:col-span-2 space-y-8">
-            <article>
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">Format Comparison</h3>
-              <div className="overflow-x-auto">
-                <table className="w-full text-sm border-collapse">
-                  <thead>
-                    <tr className="bg-gray-50 border border-gray-200">
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border-r border-gray-200">Format</th>
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border-r border-gray-200">Compression</th>
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700 border-r border-gray-200">Transparency</th>
-                      <th className="text-left px-4 py-2 font-semibold text-gray-700">Best For</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      ["JPEG", "Lossy", "No", "Photos, social media, email"],
-                      ["PNG", "Lossless", "Yes (alpha)", "Logos, UI graphics, screenshots"],
-                      ["WEBP", "Lossy + Lossless", "Yes", "Web images — best overall compression"],
-                      ["GIF", "Lossless (256 colors)", "Yes (1-bit)", "Simple animations, memes"],
-                    ].map(([fmt, comp, trans, use], i) => (
-                      <tr key={i} className={`border border-gray-200 ${i % 2 === 0 ? "bg-white" : "bg-gray-50/50"}`}>
-                        <td className="px-4 py-2 font-bold text-gray-900 border-r border-gray-200">{fmt}</td>
-                        <td className="px-4 py-2 text-gray-600 border-r border-gray-200">{comp}</td>
-                        <td className="px-4 py-2 text-gray-600 border-r border-gray-200">{trans}</td>
-                        <td className="px-4 py-2 text-gray-500">{use}</td>
-                      </tr>
+            <div className="space-y-4">
+              <Card>
+                <CardContent className="p-5 space-y-3">
+                  <Label className="font-semibold">Convert To</Label>
+                  <div className="space-y-2">
+                    {formats.map((f) => (
+                      <button
+                        key={f.value}
+                        onClick={() => setFormat(f.value)}
+                        className={`w-full text-left p-3.5 rounded-xl border-2 transition-all ${
+                          format === f.value
+                            ? "border-green-500 dark:border-green-500 bg-green-50 dark:bg-green-950/40"
+                            : "border-gray-200 dark:border-gray-600 hover:border-green-300 dark:hover:border-green-700 bg-white dark:bg-gray-800"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2">
+                          <span className={`px-2 py-0.5 rounded-md text-xs font-bold border ${f.color}`}>{f.label}</span>
+                          {format === f.value && <CheckCircle2 className="w-4 h-4 text-green-500 ml-auto" />}
+                        </div>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1.5 leading-relaxed">{f.desc}</p>
+                      </button>
                     ))}
-                  </tbody>
-                </table>
-              </div>
-            </article>
-
-            <article>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">When to Convert to WEBP</h3>
-              <p className="text-gray-600 leading-relaxed">
-                WEBP is a modern image format developed by Google. It produces files that are <strong>25–35% smaller than JPEG</strong> at the same visual quality, and also supports transparency like PNG. If you're building a website, converting all images to WEBP is one of the fastest ways to improve load times and Core Web Vitals scores.
-              </p>
-              <p className="text-gray-600 leading-relaxed mt-3">
-                Browser support for WEBP is now excellent — all major modern browsers (Chrome, Firefox, Safari, Edge) support it. For legacy compatibility, keep a JPEG fallback.
-              </p>
-            </article>
-
-            <article>
-              <h3 className="text-lg font-semibold text-gray-900 mb-3">PNG to JPEG: When Should You Convert?</h3>
-              <p className="text-gray-600 leading-relaxed">
-                Convert PNG to JPEG when: (1) The image is a photograph with no transparency. (2) You need a smaller file size. PNG uses lossless compression which is great for graphics but inefficient for photos. A photo saved as PNG might be 5MB while the same photo as JPEG at 90% quality is only 500KB — with nearly invisible quality loss.
-              </p>
-              <p className="text-gray-600 leading-relaxed mt-3">
-                <strong>Don't convert</strong> PNG to JPEG when your image has a transparent background (e.g., a logo) — JPEG doesn't support transparency and will fill it with white.
-              </p>
-            </article>
-          </div>
-
-          <div className="space-y-6">
-            <div className="bg-green-50 border border-green-100 rounded-xl p-5">
-              <h3 className="font-semibold text-gray-900 mb-3">Quick Decision Guide</h3>
-              <ul className="space-y-3">
-                {[
-                  { label: "Photo for web → WEBP or JPEG" },
-                  { label: "Logo / graphic → PNG" },
-                  { label: "Screenshot → PNG" },
-                  { label: "Social media → JPEG" },
-                  { label: "Animated content → GIF" },
-                  { label: "Email photo → JPEG" },
-                ].map((item, i) => (
-                  <li key={i} className="flex items-center gap-2 text-sm text-gray-700">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
-                    {item.label}
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="bg-white border border-gray-200 rounded-xl p-5">
-              <h3 className="font-semibold text-gray-900 mb-3">FAQs</h3>
-              <div className="space-y-4">
-                {[
-                  { q: "Does converting lose quality?", a: "Converting to JPEG or WEBP (lossy) may reduce quality slightly. Converting to PNG is always lossless." },
-                  { q: "Can I convert back to the original format?", a: "Yes, but if you converted to lossy (JPEG), some quality is permanently lost. Convert from originals." },
-                  { q: "Do converted images keep transparency?", a: "Only PNG and WEBP support transparency. Converting transparent PNG to JPEG will lose the transparency." },
-                ].map((faq, i) => (
-                  <div key={i}>
-                    <p className="text-sm font-semibold text-gray-800">{faq.q}</p>
-                    <p className="text-xs text-gray-500 mt-1 leading-relaxed">{faq.a}</p>
                   </div>
-                ))}
-              </div>
+                </CardContent>
+              </Card>
+
+              <button onClick={processImage}
+                className="w-full py-4 rounded-xl font-bold text-base text-white transition-all hover:opacity-90 active:scale-[0.98]"
+                style={{ background: "linear-gradient(135deg, #15803d, #16a34a)", boxShadow: "0 4px 16px rgba(22,163,74,0.4)" }}>
+                Convert to {selectedFmt.label}
+              </button>
+              <Button variant="outline" size="sm" className="w-full" onClick={reset}>
+                <RefreshCw className="w-3.5 h-3.5 mr-2" /> Start Over
+              </Button>
             </div>
+          </div>
+        )}
+
+        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
+          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">JPEG vs PNG vs WEBP — Which Format to Use?</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {[
+              { f: "JPEG", pro: "Smallest file size for photos", con: "Lossy — slight quality loss", use: "Photos, social media, email" },
+              { f: "PNG", pro: "Lossless — perfect quality", con: "Larger file size than JPEG", use: "Logos, screenshots, graphics with text" },
+              { f: "WEBP", pro: "Best compression + quality ratio", con: "Not supported in old email clients", use: "Websites, web apps, modern platforms" },
+            ].map((item) => (
+              <div key={item.f} className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl">
+                <p className="font-bold text-gray-900 dark:text-white text-lg mb-2">{item.f}</p>
+                <p className="text-xs text-green-600 dark:text-green-400 mb-1">✓ {item.pro}</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">✗ {item.con}</p>
+                <p className="text-xs font-medium text-gray-600 dark:text-gray-300">Best for: {item.use}</p>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
-    </ToolLayout>
+      </ToolLayout>
+    </>
   );
 }
