@@ -134,7 +134,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                       return (
                         <Link
                           key={tool.slug}
-                          href={`/tools/${tool.slug}`}
+                          href={tool.slug === "image-resizer" ? "/" : `/tools/${tool.slug}`}
                           className={`flex items-center gap-3 mx-2 px-3 py-2.5 rounded-xl transition-all group ${
                             active
                               ? "bg-green-50 dark:bg-green-950/50"
@@ -186,7 +186,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   return (
                     <Link
                       key={tool.slug}
-                      href={`/tools/${tool.slug}`}
+                      href={tool.slug === "image-resizer" ? "/" : `/tools/${tool.slug}`}
                       className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] font-medium whitespace-nowrap transition-all shrink-0 ${
                         active
                           ? "bg-green-600 text-white shadow-sm"

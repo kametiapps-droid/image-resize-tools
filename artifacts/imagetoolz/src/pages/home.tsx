@@ -232,81 +232,115 @@ export default function Home() {
         {/* ── Resize for Any Platform ── */}
         <section className="border-t border-gray-200 dark:border-gray-800 py-14 px-4">
           <div className="max-w-7xl mx-auto">
-            <div className="mb-8">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Resize for Any Platform</h2>
-              <p className="text-gray-500 dark:text-gray-400 mt-1">25+ presets built-in — click any to start resizing immediately.</p>
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3">
+              <div>
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Resize for Any Platform</h2>
+                <p className="text-gray-500 dark:text-gray-400 mt-1">Click any preset — it opens the resizer with the right size ready.</p>
+              </div>
+              <Link href="/"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold text-white shrink-0 transition-all hover:opacity-90"
+                style={{ background: "linear-gradient(135deg, #15803d, #16a34a)" }}>
+                Open Image Resizer <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
               {[
-                { name: "Instagram Post",   w: 1080, h: 1080, category: "Social",  gradient: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)" },
-                { name: "Instagram Story",  w: 1080, h: 1920, category: "Social",  gradient: "linear-gradient(135deg, #f09433 0%, #bc1888 100%)" },
-                { name: "Instagram Reel",   w: 1080, h: 1920, category: "Social",  gradient: "linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)" },
-                { name: "Facebook Cover",   w: 1200, h: 630,  category: "Social",  gradient: "linear-gradient(135deg, #1877f2, #0d6efd)" },
-                { name: "Twitter/X Post",   w: 1600, h: 900,  category: "Social",  gradient: "linear-gradient(135deg, #0f0f0f, #3a3a3a)" },
-                { name: "Twitter/X Banner", w: 1500, h: 500,  category: "Social",  gradient: "linear-gradient(135deg, #14171a, #657786)" },
-                { name: "YouTube Thumbnail",w: 1280, h: 720,  category: "Video",   gradient: "linear-gradient(135deg, #ff0000, #cc0000)" },
-                { name: "WhatsApp DP",      w: 512,  h: 512,  category: "Social",  gradient: "linear-gradient(135deg, #25d366, #128c7e)" },
-                { name: "LinkedIn Post",    w: 1200, h: 627,  category: "Social",  gradient: "linear-gradient(135deg, #0a66c2, #0077b5)" },
-                { name: "LinkedIn Banner",  w: 1584, h: 396,  category: "Social",  gradient: "linear-gradient(135deg, #0a66c2, #004182)" },
-                { name: "Pinterest Pin",    w: 1000, h: 1500, category: "Social",  gradient: "linear-gradient(135deg, #e60023, #ad081b)" },
-                { name: "Website Banner",   w: 1920, h: 600,  category: "Web",     gradient: "linear-gradient(135deg, #667eea, #764ba2)" },
+                { name: "Instagram Post",    w: 1080, h: 1080, icon: "IG", gradient: "linear-gradient(145deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%)" },
+                { name: "Instagram Story",   w: 1080, h: 1920, icon: "IG", gradient: "linear-gradient(170deg, #f09433 0%, #dc2743 50%, #bc1888 100%)" },
+                { name: "Instagram Reel",    w: 1080, h: 1920, icon: "▶",  gradient: "linear-gradient(145deg, #833ab4, #fd1d1d 50%, #fcb045)" },
+                { name: "Facebook Cover",    w: 1200, h: 630,  icon: "f",  gradient: "linear-gradient(145deg, #1877f2, #0a58ca)" },
+                { name: "Twitter/X Post",    w: 1600, h: 900,  icon: "𝕏",  gradient: "linear-gradient(145deg, #14171a, #2d3748)" },
+                { name: "Twitter/X Banner",  w: 1500, h: 500,  icon: "𝕏",  gradient: "linear-gradient(145deg, #0f0f0f, #536878)" },
+                { name: "YouTube Thumbnail", w: 1280, h: 720,  icon: "▶",  gradient: "linear-gradient(145deg, #ff0000, #b91c1c)" },
+                { name: "WhatsApp DP",       w: 512,  h: 512,  icon: "W",  gradient: "linear-gradient(145deg, #25d366, #075e54)" },
+                { name: "LinkedIn Post",     w: 1200, h: 627,  icon: "in", gradient: "linear-gradient(145deg, #0a66c2, #004182)" },
+                { name: "LinkedIn Banner",   w: 1584, h: 396,  icon: "in", gradient: "linear-gradient(145deg, #0077b5, #004182)" },
+                { name: "Pinterest Pin",     w: 1000, h: 1500, icon: "P",  gradient: "linear-gradient(145deg, #e60023, #9d0208)" },
+                { name: "Website Banner",    w: 1920, h: 600,  icon: "W",  gradient: "linear-gradient(145deg, #4f46e5, #7c3aed)" },
               ].map((preset) => {
-                const aspectRatio = preset.w / preset.h;
-                const maxW = 160;
-                const maxH = 90;
+                const ar = preset.w / preset.h;
+                const containerH = 128;
+                const containerW_approx = 220;
                 let boxW: number, boxH: number;
-                if (aspectRatio >= 1) {
-                  boxW = maxW;
-                  boxH = Math.round(maxW / aspectRatio);
+                if (ar >= containerW_approx / containerH) {
+                  boxW = containerW_approx * 0.85;
+                  boxH = Math.round(boxW / ar);
                 } else {
-                  boxH = maxH;
-                  boxW = Math.round(maxH * aspectRatio);
+                  boxH = containerH * 0.85;
+                  boxW = Math.round(boxH * ar);
                 }
-                boxH = Math.max(boxH, 32);
-                boxW = Math.max(boxW, 32);
+                boxW = Math.max(boxW, 28);
+                boxH = Math.max(boxH, 28);
                 return (
                   <Link
                     key={preset.name}
-                    href="/tools/image-resizer"
-                    className="group flex flex-col items-center gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-green-400 hover:shadow-md transition-all cursor-pointer"
+                    href="/"
+                    className="group rounded-2xl border-2 border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-green-400 dark:hover:border-green-500 overflow-hidden transition-all duration-200 hover:shadow-xl cursor-pointer flex flex-col"
                   >
-                    <div className="flex items-center justify-center w-full h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
+                    {/* Aspect-ratio preview area */}
+                    <div
+                      className="relative w-full flex items-center justify-center overflow-hidden"
+                      style={{ height: containerH, background: "#f8fafc" }}
+                    >
+                      {/* The sized box */}
                       <div
-                        className="rounded-md shadow-sm transition-transform group-hover:scale-105"
-                        style={{
-                          width: boxW,
-                          height: boxH,
-                          background: preset.gradient,
-                          minWidth: 28,
-                          minHeight: 28,
-                        }}
-                      />
+                        className="relative overflow-hidden rounded-lg shadow-md transition-transform duration-200 group-hover:scale-[1.07]"
+                        style={{ width: boxW, height: boxH, background: preset.gradient, flexShrink: 0 }}
+                      >
+                        {/* SVG landscape — mountains + sun */}
+                        <svg
+                          viewBox="0 0 100 100"
+                          preserveAspectRatio="xMidYMid slice"
+                          xmlns="http://www.w3.org/2000/svg"
+                          style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }}
+                        >
+                          {/* Sky glow */}
+                          <ellipse cx="75" cy="20" rx="22" ry="22" fill="rgba(255,255,255,0.18)" />
+                          {/* Sun */}
+                          <circle cx="75" cy="20" r="11" fill="rgba(255,255,255,0.35)" />
+                          {/* Far mountains */}
+                          <polygon points="0,100 20,55 38,75 55,45 72,68 88,40 100,58 100,100" fill="rgba(0,0,0,0.12)" />
+                          {/* Near mountains */}
+                          <polygon points="0,100 15,72 30,85 50,60 68,78 85,58 100,70 100,100" fill="rgba(0,0,0,0.18)" />
+                          {/* Ground */}
+                          <rect x="0" y="88" width="100" height="12" fill="rgba(0,0,0,0.1)" />
+                        </svg>
+                        {/* Platform icon — centered */}
+                        <div
+                          className="absolute inset-0 flex items-center justify-center"
+                          style={{ fontSize: Math.min(boxW, boxH) * 0.3, color: "rgba(255,255,255,0.55)", fontWeight: 900, letterSpacing: "-0.02em", userSelect: "none" }}
+                        >
+                          {preset.icon}
+                        </div>
+                      </div>
                     </div>
-                    <div className="text-center w-full">
-                      <div className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-tight">
+
+                    {/* Card footer */}
+                    <div className="px-3.5 py-3 border-t border-gray-100 dark:border-gray-800">
+                      <p className="font-semibold text-gray-900 dark:text-white text-sm leading-tight group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors">
                         {preset.name}
-                      </div>
-                      <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-mono">
+                      </p>
+                      <p className="text-[11px] text-gray-400 dark:text-gray-500 font-mono mt-0.5">
                         {preset.w} × {preset.h} px
-                      </div>
+                      </p>
                     </div>
                   </Link>
                 );
               })}
             </div>
 
-            <div className="mt-8 p-5 rounded-2xl border border-green-200 dark:border-green-900 flex flex-col sm:flex-row items-center justify-between gap-4"
+            {/* Custom size CTA */}
+            <div className="mt-8 rounded-2xl border border-green-200 dark:border-green-900 p-5 flex flex-col sm:flex-row items-center justify-between gap-4"
               style={{ background: "linear-gradient(135deg, #f0fdf4, #dcfce7)" }}>
               <div>
                 <p className="font-bold text-gray-900 text-base">Need a custom size?</p>
-                <p className="text-sm text-gray-600 mt-0.5">Enter exact pixel dimensions — width, height, quality, and output format.</p>
+                <p className="text-sm text-gray-600 mt-0.5">Enter exact pixel dimensions — width, height, quality, and output format all in one place.</p>
               </div>
-              <Link href="/tools/image-resizer"
+              <Link href="/"
                 className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-white transition-all hover:opacity-90 text-sm"
                 style={{ background: "linear-gradient(135deg, #15803d, #16a34a)" }}>
-                Custom Resize
-                <ArrowRight className="w-4 h-4" />
+                Custom Resize <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>
