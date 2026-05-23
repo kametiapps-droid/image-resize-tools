@@ -5,7 +5,7 @@ import { Layout } from "@/components/layout";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Maximize2, Archive, Repeat, Crop, Type, RotateCw, FileText, Pipette, ShieldOff, CheckCircle2,
-  Zap, Lock, Star, ArrowRight,
+  Zap, Lock, Star, ArrowRight, Upload, Settings2, Download, ChevronRight,
 } from "lucide-react";
 
 const iconMap: Record<string, React.ElementType> = {
@@ -163,6 +163,153 @@ export default function Home() {
               })}
             </div>
           )}
+        </section>
+
+        {/* ── How It Works ── */}
+        <section className="border-t border-gray-200 dark:border-gray-800 py-14 px-4 bg-gray-50 dark:bg-gray-950">
+          <div className="max-w-4xl mx-auto">
+            <h2 className="text-2xl font-bold text-center text-gray-900 dark:text-white mb-2">How It Works</h2>
+            <p className="text-center text-gray-500 dark:text-gray-400 mb-10">Resize any image in 3 simple steps — takes under 10 seconds.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-0 relative">
+              {[
+                {
+                  Icon: Upload,
+                  step: "1",
+                  title: "Upload Your Image",
+                  desc: "Drag & drop or click to select any JPEG, PNG, WEBP, or GIF from your device.",
+                  color: "#16a34a",
+                  bg: "#dcfce7",
+                },
+                {
+                  Icon: Settings2,
+                  step: "2",
+                  title: "Choose Size or Preset",
+                  desc: "Pick from 25+ social media presets or enter a custom width & height. Lock aspect ratio if needed.",
+                  color: "#0ea5e9",
+                  bg: "#e0f2fe",
+                },
+                {
+                  Icon: Download,
+                  step: "3",
+                  title: "Download Instantly",
+                  desc: "Click Process — your resized image is ready in milliseconds. Download in JPEG, PNG, or WEBP.",
+                  color: "#8b5cf6",
+                  bg: "#ede9fe",
+                },
+              ].map((item, i) => (
+                <div key={item.step} className="relative flex flex-col items-center text-center px-6 py-8">
+                  {i < 2 && (
+                    <div className="hidden sm:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-1/2 z-10 w-8 h-8 rounded-full bg-white dark:bg-gray-900 border-2 border-gray-200 dark:border-gray-700 items-center justify-center">
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    </div>
+                  )}
+                  <div className="relative mb-4">
+                    <div className="w-16 h-16 rounded-2xl flex items-center justify-center shadow-sm"
+                      style={{ background: item.bg }}>
+                      <item.Icon className="w-7 h-7" style={{ color: item.color }} />
+                    </div>
+                    <span className="absolute -top-2 -right-2 w-6 h-6 rounded-full text-white text-xs font-black flex items-center justify-center shadow"
+                      style={{ background: item.color }}>
+                      {item.step}
+                    </span>
+                  </div>
+                  <h3 className="font-bold text-gray-900 dark:text-white text-base mb-1.5">{item.title}</h3>
+                  <p className="text-sm text-gray-500 dark:text-gray-400 leading-relaxed">{item.desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="text-center mt-8">
+              <Link href="/tools/image-resizer"
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl font-bold text-white transition-all hover:opacity-90 active:scale-95"
+                style={{ background: "linear-gradient(135deg, #15803d, #16a34a)" }}>
+                Try the Image Resizer
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ── Resize for Any Platform ── */}
+        <section className="border-t border-gray-200 dark:border-gray-800 py-14 px-4">
+          <div className="max-w-7xl mx-auto">
+            <div className="mb-8">
+              <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Resize for Any Platform</h2>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">25+ presets built-in — click any to start resizing immediately.</p>
+            </div>
+
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+              {[
+                { name: "Instagram Post",   w: 1080, h: 1080, category: "Social",  gradient: "linear-gradient(135deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888)" },
+                { name: "Instagram Story",  w: 1080, h: 1920, category: "Social",  gradient: "linear-gradient(135deg, #f09433 0%, #bc1888 100%)" },
+                { name: "Instagram Reel",   w: 1080, h: 1920, category: "Social",  gradient: "linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)" },
+                { name: "Facebook Cover",   w: 1200, h: 630,  category: "Social",  gradient: "linear-gradient(135deg, #1877f2, #0d6efd)" },
+                { name: "Twitter/X Post",   w: 1600, h: 900,  category: "Social",  gradient: "linear-gradient(135deg, #0f0f0f, #3a3a3a)" },
+                { name: "Twitter/X Banner", w: 1500, h: 500,  category: "Social",  gradient: "linear-gradient(135deg, #14171a, #657786)" },
+                { name: "YouTube Thumbnail",w: 1280, h: 720,  category: "Video",   gradient: "linear-gradient(135deg, #ff0000, #cc0000)" },
+                { name: "WhatsApp DP",      w: 512,  h: 512,  category: "Social",  gradient: "linear-gradient(135deg, #25d366, #128c7e)" },
+                { name: "LinkedIn Post",    w: 1200, h: 627,  category: "Social",  gradient: "linear-gradient(135deg, #0a66c2, #0077b5)" },
+                { name: "LinkedIn Banner",  w: 1584, h: 396,  category: "Social",  gradient: "linear-gradient(135deg, #0a66c2, #004182)" },
+                { name: "Pinterest Pin",    w: 1000, h: 1500, category: "Social",  gradient: "linear-gradient(135deg, #e60023, #ad081b)" },
+                { name: "Website Banner",   w: 1920, h: 600,  category: "Web",     gradient: "linear-gradient(135deg, #667eea, #764ba2)" },
+              ].map((preset) => {
+                const aspectRatio = preset.w / preset.h;
+                const maxW = 160;
+                const maxH = 90;
+                let boxW: number, boxH: number;
+                if (aspectRatio >= 1) {
+                  boxW = maxW;
+                  boxH = Math.round(maxW / aspectRatio);
+                } else {
+                  boxH = maxH;
+                  boxW = Math.round(maxH * aspectRatio);
+                }
+                boxH = Math.max(boxH, 32);
+                boxW = Math.max(boxW, 32);
+                return (
+                  <Link
+                    key={preset.name}
+                    href="/tools/image-resizer"
+                    className="group flex flex-col items-center gap-3 p-4 rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 hover:border-green-400 hover:shadow-md transition-all cursor-pointer"
+                  >
+                    <div className="flex items-center justify-center w-full h-24 bg-gray-50 dark:bg-gray-800 rounded-lg overflow-hidden">
+                      <div
+                        className="rounded-md shadow-sm transition-transform group-hover:scale-105"
+                        style={{
+                          width: boxW,
+                          height: boxH,
+                          background: preset.gradient,
+                          minWidth: 28,
+                          minHeight: 28,
+                        }}
+                      />
+                    </div>
+                    <div className="text-center w-full">
+                      <div className="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-green-600 dark:group-hover:text-green-400 transition-colors leading-tight">
+                        {preset.name}
+                      </div>
+                      <div className="text-xs text-gray-400 dark:text-gray-500 mt-0.5 font-mono">
+                        {preset.w} × {preset.h} px
+                      </div>
+                    </div>
+                  </Link>
+                );
+              })}
+            </div>
+
+            <div className="mt-8 p-5 rounded-2xl border border-green-200 dark:border-green-900 flex flex-col sm:flex-row items-center justify-between gap-4"
+              style={{ background: "linear-gradient(135deg, #f0fdf4, #dcfce7)" }}>
+              <div>
+                <p className="font-bold text-gray-900 text-base">Need a custom size?</p>
+                <p className="text-sm text-gray-600 mt-0.5">Enter exact pixel dimensions — width, height, quality, and output format.</p>
+              </div>
+              <Link href="/tools/image-resizer"
+                className="shrink-0 inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-white transition-all hover:opacity-90 text-sm"
+                style={{ background: "linear-gradient(135deg, #15803d, #16a34a)" }}>
+                Custom Resize
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
         </section>
 
         {/* ── Why CropImages ── */}
