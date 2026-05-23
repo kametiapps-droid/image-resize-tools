@@ -8,7 +8,7 @@ import {
 
 const SITE_NAME = "CropImages";
 const CONTACT_EMAIL = "iftechstudio@gmail.com";
-const AUTHOR = "If Tech Studio Team";
+const AUTHOR = "If Tech Studio";
 const DOMAIN = "https://cropimages.store";
 
 const tools = [

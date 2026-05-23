@@ -69,6 +69,10 @@ export default function Home() {
       <Helmet>
         <title>Free Online Image Tools — Resize, Compress, Convert | CropImages</title>
         <meta name="description" content="9 free browser-based image tools: resize, compress, convert, crop, watermark, rotate, image to PDF, color picker, and metadata remover. No upload. No signup. Instant results." />
+        <link rel="canonical" href="https://cropimages.store/tools" />
+        <meta property="og:title" content="Free Online Image Tools | CropImages" />
+        <meta property="og:description" content="9 free browser-based image tools by If Tech Studio. Resize, compress, convert, crop, watermark and more — 100% in your browser." />
+        <meta property="og:url" content="https://cropimages.store/tools" />
       </Helmet>
       <Layout>
         {/* ── Hero ── */}
