@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
+import Home from "@/pages/home";
 import ImageResizer from "@/pages/image-resizer";
 import ImageCompressor from "@/pages/image-compressor";
 import ImageConverter from "@/pages/image-converter";
@@ -22,7 +23,7 @@ const queryClient = new QueryClient();
 function Router() {
   return (
     <Switch>
-      <Route path="/" component={ImageResizer} />
+      <Route path="/" component={Home} />
       <Route path="/tools/image-resizer" component={ImageResizer} />
       <Route path="/tools/image-compressor" component={ImageCompressor} />
       <Route path="/tools/image-converter" component={ImageConverter} />

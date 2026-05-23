@@ -1,4 +1,9 @@
 User-agent: *
 Allow: /
 
+# Block irrelevant paths
+Disallow: /src/
+Disallow: /node_modules/
+
+# Sitemaps
 Sitemap: https://cropimages.store/sitemap.xml

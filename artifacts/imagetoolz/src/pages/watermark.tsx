@@ -67,6 +67,8 @@ export default function Watermark() {
     const canvas = canvasRef.current;
     const img = imageRef.current;
     if (!canvas || !img) return;
+    if (canvas.width !== img.width) canvas.width = img.width;
+    if (canvas.height !== img.height) canvas.height = img.height;
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     ctx.clearRect(0, 0, canvas.width, canvas.height);

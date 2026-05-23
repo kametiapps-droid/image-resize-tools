@@ -43,6 +43,7 @@ export default function ImageRotator() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
     const rad = (rotation * Math.PI) / 180;
+    // dims are set below before drawImage
     const sin = Math.abs(Math.sin(rad));
     const cos = Math.abs(Math.cos(rad));
     const newW = Math.round(img.width * cos + img.height * sin);
