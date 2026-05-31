@@ -1,5 +1,6 @@
 import express, { type Express } from "express";
 import cors from "cors";
+import type { IncomingMessage, ServerResponse } from "http";
 import pinoHttp from "pino-http";
 import { rateLimit } from "express-rate-limit";
 import router from "./routes";
@@ -9,25 +10,25 @@ const app: Express = express();
 
 app.set("trust proxy", 1);
 
-app.use(
-  pinoHttp({
-    logger,
-    serializers: {
-      req(req) {
-        return {
-          id: req.id,
-          method: req.method,
-          url: req.url?.split("?")[0],
-        };
-      },
-      res(res) {
-        return {
-          statusCode: res.statusCode,
-        };
-      },
+const httpLogger = (pinoHttp as unknown as (opts: object) => express.RequestHandler)({
+  logger,
+  serializers: {
+    req(req: IncomingMessage & { id?: unknown; url?: string; method?: string }) {
+      return {
+        id: req.id,
+        method: req.method,
+        url: req.url?.split("?")[0],
+      };
     },
-  }),
-);
+    res(res: ServerResponse) {
+      return {
+        statusCode: res.statusCode,
+      };
+    },
+  },
+});
+
+app.use(httpLogger);
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
