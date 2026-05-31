@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-const SITE_NAME = "CropImages";
+const SITE_NAME = "Image Resize";
 const BASE_TITLE = "Image Resize Tool - Resize Image In Second";
 
 export function usePageTitle(pageTitle?: string) {

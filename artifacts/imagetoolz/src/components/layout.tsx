@@ -2,11 +2,12 @@ import { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
 import {
   Maximize2, Archive, Repeat, Crop, Type, RotateCw,
-  FileText, Pipette, ShieldOff, Layers, Menu, X,
+  FileText, Pipette, ShieldOff, Menu, X,
   Sun, Moon, ChevronRight, Mail
 } from "lucide-react";
+import logoImg from "/logo.png";
 
-const SITE_NAME = "CropImages";
+const SITE_NAME = "Image Resize";
 const CONTACT_EMAIL = "iftechstudio@gmail.com";
 const AUTHOR = "If Tech Studio";
 const DOMAIN = "https://cropimages.store";
@@ -54,6 +55,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const isActive = (slug: string) =>
     location === `/tools/${slug}` || (slug === "image-resizer" && location === "/");
 
+  // Close on outside click
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
@@ -64,7 +66,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => document.removeEventListener("mousedown", handleClick);
   }, [menuOpen]);
 
+  // Close on route change
   useEffect(() => { setMenuOpen(false); }, [location]);
+
+  // Close on scroll
+  useEffect(() => {
+    const handleScroll = () => setMenuOpen(false);
+    if (menuOpen) window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [menuOpen]);
 
   return (
     <div className="min-h-screen flex flex-col bg-background text-foreground">
@@ -76,12 +86,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 shrink-0 group">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center transition-transform group-hover:scale-105"
-              style={{ background: "linear-gradient(135deg, #14532d, #22c55e)" }}>
-              <Layers className="w-4 h-4 text-white" />
-            </div>
+            <img
+              src={logoImg}
+              alt="Image Resize logo"
+              className="w-8 h-8 rounded-lg object-cover transition-transform group-hover:scale-105"
+            />
             <span className="font-bold text-[17px] text-gray-900 dark:text-white tracking-tight">
-              Crop<span className="text-green-600 dark:text-green-400">Images</span>
+              Image<span className="text-green-600 dark:text-green-400">Resize</span>
             </span>
           </Link>
 
@@ -215,12 +226,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
             {/* Brand */}
             <div className="col-span-2 sm:col-span-1">
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center"
-                  style={{ background: "linear-gradient(135deg, #14532d, #22c55e)" }}>
-                  <Layers className="w-3.5 h-3.5 text-white" />
-                </div>
+                <img
+                  src={logoImg}
+                  alt="Image Resize logo"
+                  className="w-7 h-7 rounded-lg object-cover"
+                />
                 <span className="font-bold text-gray-900 dark:text-white">
-                  Crop<span className="text-green-600 dark:text-green-400">Images</span>
+                  Image<span className="text-green-600 dark:text-green-400">Resize</span>
                 </span>
               </div>
               <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-3">
