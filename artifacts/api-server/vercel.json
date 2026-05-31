@@ -1,0 +1,10 @@
+{
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/dist/index.mjs" }
+  ],
+  "functions": {
+    "dist/index.mjs": {
+      "includeFiles": "dist/**"
+    }
+  }
+}
