@@ -9,7 +9,12 @@
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
   },
   "private": true,
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.4",
+    "hono": "^4.7.11"
+  },
   "devDependencies": {
+    "@cloudflare/workers-types": "^4.20250525.0",
     "prettier": "^3.8.3",
     "typescript": "~5.9.3"
   }
