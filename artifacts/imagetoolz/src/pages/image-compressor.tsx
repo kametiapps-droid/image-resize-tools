@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, CheckCircle2, TrendingDown, ArrowRight } from "lucide-react";
+import { RefreshCw, TrendingDown, ArrowRight } from "lucide-react";
+import { ToolArticle } from "@/components/tool-article";
 import { useRecordToolUse } from "@workspace/api-client-react";
 import imageCompression from "browser-image-compression";
 
@@ -144,41 +145,28 @@ export default function ImageCompressor() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10 space-y-8">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">How to Compress Images Without Losing Quality</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Why Compress Images?</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { t: "Faster Websites", d: "Smaller images load faster, improving PageSpeed scores." },
-                    { t: "Email Attachments", d: "Most email providers cap attachments at 10–25 MB." },
-                    { t: "Social Media", d: "Pre-compressing gives you control over final quality." },
-                    { t: "Storage Savings", d: "Reduce costs on Google Drive, Dropbox, iCloud." },
-                  ].map((item) => (
-                    <div key={item.t} className="p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{item.t}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{item.d}</p>
-                    </div>
-                  ))}
-                </div>
-              </article>
-            </div>
-            <div className="space-y-5">
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Best Practices</h3>
-                <ul className="space-y-2.5">
-                  {["Start at 80% — ideal for most photos", "Always keep your original file", "Use WEBP for best web compression", "Resize before compressing for max reduction"].map((tip, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{tip}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="How to Compress Images Without Losing Quality"
+          subheading="Reduce file size while keeping your images looking sharp — entirely in your browser."
+          steps={[
+            { title: "Upload your image", description: "Select a JPG, PNG, WEBP, or GIF file. Your image stays on your device — nothing is uploaded." },
+            { title: "Set the quality level", description: "Use the quality slider (10–100%). For photos, 75–85% gives the best size-to-quality ratio." },
+            { title: "Choose output format", description: "Keep the original format, or switch to WEBP for up to 30% better compression than JPEG." },
+            { title: "Compress & Download", description: "Click Compress Image. The result shows you the exact file size reduction before you download." },
+          ]}
+          tips={[
+            "Start at 80% — ideal balance for most photos",
+            "Always keep a copy of the original before compressing",
+            "WEBP achieves the best compression for web use",
+            "Resize the image first for maximum file size reduction",
+            "PNG compression is lossless — quality setting has no effect",
+          ]}
+          faqs={[
+            { question: "How much can I reduce file size?", answer: "Typically 40–80% for JPEG photos. WEBP can achieve even more. Results vary by image content." },
+            { question: "Will compression affect print quality?", answer: "For print, keep quality at 90%+. Web display looks great at 75–85%." },
+            { question: "Is there a file size limit?", answer: "No server limits — processing is 100% in your browser. Memory is the only constraint." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

@@ -6,7 +6,8 @@ import { UploadLoading } from "@/components/tool-steps";
 import { ShareButtons } from "@/components/share-buttons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, Copy, Check, CheckCircle2, Crosshair } from "lucide-react";
+import { RefreshCw, Copy, Check, Crosshair } from "lucide-react";
+import { ToolArticle } from "@/components/tool-article";
 import { useRecordToolUse } from "@workspace/api-client-react";
 import { useToast } from "@/hooks/use-toast";
 
@@ -189,44 +190,28 @@ export default function ColorPicker() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Pick Colors from Images</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-4">
-              <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                Upload any image and click anywhere on it to instantly extract the exact color value at that point. You'll get the HEX code (for web design), RGB values (for digital graphics), and HSL values (for CSS and design tools). Your last 8 picked colors are saved in the history for easy comparison.
-              </p>
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Common Uses</h3>
-                <div className="grid grid-cols-2 gap-3">
-                  {[
-                    { t: "Web Design", d: "Match brand colors from logos or screenshots for CSS." },
-                    { t: "UI/UX Design", d: "Extract palette colors from reference designs." },
-                    { t: "Photography", d: "Identify specific color tones in images for editing." },
-                    { t: "Print Design", d: "Get exact color codes for accurate color matching." },
-                  ].map((item) => (
-                    <div key={item.t} className="p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-                      <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{item.t}</p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{item.d}</p>
-                    </div>
-                  ))}
-                </div>
-              </article>
-            </div>
-            <div>
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Tips</h3>
-                <ul className="space-y-2.5">
-                  {["Zoom in for precise pixel picking", "HEX is standard for web/CSS", "RGB is used in Photoshop & Figma", "HSL is best for color adjustments", "Use history to compare picked colors"].map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="How to Pick Colors from Images"
+          subheading="Click anywhere on any image to extract exact HEX, RGB, and HSL color values — instantly."
+          steps={[
+            { title: "Upload your image", description: "Select any JPG, PNG, WEBP, or GIF file — a logo, screenshot, photo, or design reference." },
+            { title: "Click anywhere on the image", description: "Your cursor becomes a crosshair. Click any pixel to extract its exact color value." },
+            { title: "Copy the color code", description: "Click to copy HEX (for web/CSS), RGB (for Photoshop/Figma), or HSL (for design tools)." },
+            { title: "Compare with history", description: "Your last 8 picked colors are shown below. Click any swatch to view its values again." },
+          ]}
+          tips={[
+            "HEX is the standard format for web and CSS development",
+            "RGB is used directly in Photoshop, Figma, and Illustrator",
+            "HSL is best when you need to adjust hue, saturation, or brightness",
+            "Zoom your browser in (Ctrl+) for more precise pixel-level picking",
+            "Use the color history to build a palette from a single image",
+          ]}
+          faqs={[
+            { question: "What color formats does this tool provide?", answer: "HEX (#rrggbb), RGB (r, g, b), and HSL (h°, s%, l%) — all three are shown and individually copyable." },
+            { question: "How many colors can I pick per session?", answer: "Unlimited picks per session. The last 8 colors are shown in the history panel for easy comparison." },
+            { question: "Is my image uploaded anywhere?", answer: "No. Color picking uses the Canvas API entirely in your browser. Your image never leaves your device." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

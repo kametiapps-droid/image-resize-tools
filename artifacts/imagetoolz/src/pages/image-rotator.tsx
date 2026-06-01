@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, RotateCw, RotateCcw, FlipHorizontal, FlipVertical, CheckCircle2 } from "lucide-react";
+import { RefreshCw, RotateCw, RotateCcw, FlipHorizontal, FlipVertical } from "lucide-react";
+import { ToolArticle } from "@/components/tool-article";
 import { useRecordToolUse } from "@workspace/api-client-react";
 
 type Step = "idle" | "loading" | "settings" | "processing" | "done";
@@ -194,41 +195,28 @@ export default function ImageRotator() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Rotate & Flip Images Online</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Step-by-Step</h3>
-                <ol className="space-y-3">
-                  {[
-                    { n: "1", t: "Upload your image", d: "Drag & drop or click to browse — JPG, PNG, WEBP, GIF supported." },
-                    { n: "2", t: "Choose rotation & flip", d: "Use quick buttons (90°, 180°) or the custom angle slider (0–359°). Toggle horizontal/vertical flip." },
-                    { n: "3", t: "Preview changes live", d: "The canvas updates in real-time as you adjust rotation and flip settings." },
-                    { n: "4", t: "Download your image", d: "Click Apply & Download to save the transformed image in the original format." },
-                  ].map((s) => (
-                    <li key={s.n} className="flex gap-4">
-                      <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{s.n}</span>
-                      <div><p className="font-semibold text-gray-900 dark:text-white">{s.t}</p><p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{s.d}</p></div>
-                    </li>
-                  ))}
-                </ol>
-              </article>
-            </div>
-            <div>
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Tips</h3>
-                <ul className="space-y-2.5">
-                  {["90° right/left for portrait↔landscape", "180° to flip upside down", "Use Flip H to mirror selfies", "Custom angle for artistic slant effects"].map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="How to Rotate & Flip Images Online"
+          subheading="Fix orientation, create mirrors, or add creative angles — live preview, instant download."
+          steps={[
+            { title: "Upload your image", description: "Drag & drop or click to browse — JPG, PNG, WEBP, and GIF all supported." },
+            { title: "Choose rotation", description: "Click 90° Left, 180°, or 90° Right for quick rotation. Use the slider for any angle from 0–359°." },
+            { title: "Apply flip (optional)", description: "Toggle Horizontal flip to mirror the image, or Vertical flip to turn it upside down." },
+            { title: "Download", description: "Click Apply & Download. The image saves in the same format as the original." },
+          ]}
+          tips={[
+            "90° right or left to switch between portrait and landscape",
+            "180° rotation is equivalent to flipping both H and V",
+            "Use Flip Horizontal to mirror selfies or text images",
+            "Custom angle slider is great for creative or artistic effects",
+            "Preview updates live — no need to re-upload after each change",
+          ]}
+          faqs={[
+            { question: "Does rotation affect image quality?", answer: "90°, 180°, and 270° rotations are lossless. Custom angles (e.g. 45°) require interpolation which may slightly soften edges." },
+            { question: "What formats are supported?", answer: "JPG, PNG, WEBP, and GIF. The output format matches the input." },
+            { question: "Is there a size limit?", answer: "No. Processing happens entirely in your browser — no file size restrictions." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

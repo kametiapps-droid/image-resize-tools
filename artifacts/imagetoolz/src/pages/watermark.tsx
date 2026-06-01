@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import { ToolArticle } from "@/components/tool-article";
 import { Helmet } from "react-helmet-async";
 import { ToolLayout } from "@/components/tool-layout";
 import { FileUploader } from "@/components/file-uploader";
@@ -212,38 +213,28 @@ export default function Watermark() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Watermark Images for Free</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { t: "Protect Your Work", d: "Adding a watermark prevents others from using your photos without credit or permission." },
-                  { t: "Brand Your Content", d: "Include your business name, website, or social handle on every image you share." },
-                  { t: "Deter Plagiarism", d: "Visible watermarks make it harder to repurpose your images without detection." },
-                  { t: "Professional Look", d: "Subtle, well-placed watermarks add a professional touch to portfolios and product photos." },
-                ].map((item) => (
-                  <div key={item.t} className="p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{item.t}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{item.d}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Best Practices</h3>
-                <ul className="space-y-2.5">
-                  {["30–50% opacity for subtle watermarks", "Bottom-right or center for best protection", "White text with dark outline works on any image", "Use your full domain or brand name"].map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="How to Add a Watermark to Images"
+          subheading="Protect your work and brand every image — fully customizable text, position, color, and opacity."
+          steps={[
+            { title: "Upload your image", description: "Drag & drop or click Select File. Supports JPG, PNG, WEBP, and GIF." },
+            { title: "Enter your watermark text", description: "Type your name, brand, website, or any text. This will appear on the image." },
+            { title: "Customize appearance", description: "Set the position (9 options), font size, opacity, and color. Preview updates in real-time." },
+            { title: "Apply & Download", description: "Click Apply Watermark to process and download your protected image instantly." },
+          ]}
+          tips={[
+            "30–50% opacity gives a professional, subtle look",
+            "Bottom-right corner is the most common watermark position",
+            "White text works on most images; add a dark shadow for contrast",
+            "Use your full domain (e.g. yoursite.com) for maximum brand impact",
+            "Higher opacity makes the watermark harder to remove digitally",
+          ]}
+          faqs={[
+            { question: "Can I use an image as a watermark?", answer: "Currently text watermarks only. Image watermark support is planned for a future update." },
+            { question: "Will the watermark reduce image quality?", answer: "No. The watermark is rendered on a copy of your image at full quality. The original is unchanged." },
+            { question: "Is my image uploaded to a server?", answer: "No. All processing is done entirely in your browser. Your files never leave your device." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

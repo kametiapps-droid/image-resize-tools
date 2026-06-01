@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, X, Plus, CheckCircle2, FileText } from "lucide-react";
+import { RefreshCw, X, Plus, FileText } from "lucide-react";
+import { ToolArticle } from "@/components/tool-article";
 import { useRecordToolUse } from "@workspace/api-client-react";
 import jsPDF from "jspdf";
 
@@ -197,38 +198,28 @@ export default function ImageToPdf() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">How to Convert Images to PDF Online</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2">
-              <ol className="space-y-3">
-                {[
-                  { n: "1", t: "Upload your images", d: "Select one or multiple JPG, PNG, WEBP, or GIF files. Up to 20 images per PDF." },
-                  { n: "2", t: "Review the order", d: "Images are shown as thumbnails in order. Click ✕ to remove any you don't want." },
-                  { n: "3", t: "Choose page settings", d: "Select PDF page size (A4, Letter, A3, Legal) and orientation (portrait or landscape)." },
-                  { n: "4", t: "Create & Download", d: "Click Create PDF — the file is generated in your browser and downloaded instantly." },
-                ].map((s) => (
-                  <li key={s.n} className="flex gap-4">
-                    <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{s.n}</span>
-                    <div><p className="font-semibold text-gray-900 dark:text-white">{s.t}</p><p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{s.d}</p></div>
-                  </li>
-                ))}
-              </ol>
-            </div>
-            <div>
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Tips</h3>
-                <ul className="space-y-2.5">
-                  {["A4 is standard for most documents", "Landscape for wide/panoramic photos", "Portrait for receipts and portraits", "Up to 20 images per PDF", "No file size limit — browser memory only"].map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="How to Convert Images to PDF"
+          subheading="Combine one or more images into a single PDF document — choose page size, orientation, and order."
+          steps={[
+            { title: "Upload your images", description: "Select one or multiple JPG, PNG, WEBP, or GIF files. Up to 20 images per PDF." },
+            { title: "Review order", description: "Images appear as numbered thumbnails. Click ✕ on any to remove it, or add more with the + button." },
+            { title: "Set page options", description: "Choose page size (A4, Letter, A3, Legal) and orientation (Portrait or Landscape)." },
+            { title: "Create & Download", description: "Click Create PDF — the file is generated entirely in your browser and downloaded immediately." },
+          ]}
+          tips={[
+            "A4 (210×297mm) is the global standard for documents",
+            "Use Landscape orientation for wide or panoramic photos",
+            "Portrait works best for receipts, ID cards, and portraits",
+            "Compress images first to reduce final PDF file size",
+            "Up to 20 images per PDF — no file size limit",
+          ]}
+          faqs={[
+            { question: "Can I reorder images before creating the PDF?", answer: "The images appear in the order you selected them. Remove and re-add them to change the order." },
+            { question: "What PDF page sizes are available?", answer: "A4, A3, Letter (US), and Legal. Portrait and landscape are both supported for each." },
+            { question: "Are my images uploaded to a server?", answer: "No. The PDF is generated 100% in your browser using jsPDF. Nothing is sent anywhere." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

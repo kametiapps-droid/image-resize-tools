@@ -3,6 +3,7 @@ import { Helmet } from "react-helmet-async";
 import { ToolLayout } from "@/components/tool-layout";
 import { FileUploader } from "@/components/file-uploader";
 import { UploadLoading, ProcessingAnimation, DownloadDone } from "@/components/tool-steps";
+import { ToolArticle } from "@/components/tool-article";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -349,105 +350,61 @@ export default function ImageResizer() {
           </div>
         )}
 
-        {/* Article */}
-        <div className="mt-14 space-y-10">
-          <div className="border-t border-gray-200 dark:border-gray-700 pt-10">
-            <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">How to Resize an Image Online — Complete Guide</h2>
-            <p className="text-gray-500 dark:text-gray-400 text-sm mb-8">Learn everything about image resizing, dimensions, aspect ratios, and best practices for web, print, and social media.</p>
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              <div className="lg:col-span-2 space-y-8">
-                <article>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Step-by-Step: How to Use the Image Resizer</h3>
-                  <ol className="space-y-3">
-                    {[
-                      { n: "1", t: "Upload your image", d: "Drag & drop a JPG, PNG, WEBP, or GIF file — or click Select File to browse. Your image never leaves your device." },
-                      { n: "2", t: "Choose a preset or enter custom dimensions", d: "Pick from 25+ presets for Instagram, YouTube, Twitter, print, web — or enter exact width × height in pixels." },
-                      { n: "3", t: "Set quality and format", d: "Choose JPEG, PNG, or WEBP. Adjust the quality slider from 30–100%. WEBP gives the smallest file; PNG is lossless." },
-                      { n: "4", t: "Click Resize Image", d: "The browser processes the image instantly and shows a download card. Click Download to save." },
-                      { n: "5", t: "Share or resize another", d: "Share the tool with friends via WhatsApp, Twitter, or Facebook — or click Reset to process another image." },
-                    ].map((step) => (
-                      <li key={step.n} className="flex gap-4">
-                        <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{step.n}</span>
-                        <div>
-                          <p className="font-semibold text-gray-900 dark:text-white">{step.t}</p>
-                          <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{step.d}</p>
-                        </div>
-                      </li>
-                    ))}
-                  </ol>
-                </article>
-
-                <article>
-                  <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Social Media Image Size Guide 2026</h3>
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm border-collapse">
-                      <thead>
-                        <tr className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
-                          <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-200 dark:border-gray-600">Platform</th>
-                          <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-200 dark:border-gray-600">Size (px)</th>
-                          <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Format</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {[
-                          ["Instagram Post (Square)", "1080 × 1080", "JPEG"],
-                          ["Instagram Story / Reel", "1080 × 1920", "JPEG"],
-                          ["Twitter/X Post", "1200 × 675", "JPEG/WEBP"],
-                          ["YouTube Thumbnail", "1280 × 720", "JPEG"],
-                          ["Facebook Cover", "851 × 315", "JPEG"],
-                          ["LinkedIn Post", "1200 × 628", "JPEG"],
-                          ["WhatsApp Profile Photo", "500 × 500", "JPEG/PNG"],
-                          ["TikTok Video Thumbnail", "1080 × 1920", "JPEG"],
-                        ].map(([name, size, fmt], i) => (
-                          <tr key={i} className={`border border-gray-200 dark:border-gray-600 ${i % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50/50 dark:bg-gray-800/50"}`}>
-                            <td className="px-4 py-2 text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-600">{name}</td>
-                            <td className="px-4 py-2 font-mono text-gray-600 dark:text-gray-400 border-r border-gray-200 dark:border-gray-600">{size}</td>
-                            <td className="px-4 py-2 text-gray-500 dark:text-gray-400">{fmt}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </article>
-              </div>
-
-              <div className="space-y-6">
-                <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Pro Tips</h3>
-                  <ul className="space-y-2.5">
-                    {[
-                      "Lock aspect ratio to avoid distortion",
-                      "Use WEBP for web — 30% smaller than JPEG",
-                      "PNG for logos and images with text",
-                      "85–90% JPEG quality is ideal for photos",
-                      "Downscale only — upscaling reduces sharpness",
-                    ].map((tip, i) => (
-                      <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                        <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />
-                        {tip}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-5">
-                  <h3 className="font-semibold text-gray-900 dark:text-white mb-3">FAQ</h3>
-                  <div className="space-y-4">
-                    {[
-                      { q: "Does resizing reduce quality?", a: "Reducing size is near-lossless in JPEG and lossless in PNG. Enlarging always reduces sharpness." },
-                      { q: "Is my image uploaded anywhere?", a: "No. All processing is done in your browser using the Canvas API. Your image never leaves your device." },
-                      { q: "What is the maximum image size?", a: "There's no enforced limit — your browser's available RAM is the only constraint." },
-                    ].map((faq, i) => (
-                      <div key={i}>
-                        <p className="text-sm font-semibold text-gray-800 dark:text-gray-200">{faq.q}</p>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1 leading-relaxed">{faq.a}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
+        <ToolArticle
+          heading="How to Resize an Image Online"
+          subheading="Free, private, and instant — all processing happens in your browser. No uploads, no accounts."
+          steps={[
+            { title: "Upload your image", description: "Drag & drop a JPG, PNG, WEBP, or GIF — or click Select File. Your image never leaves your device." },
+            { title: "Choose a preset or enter custom dimensions", description: "Pick from 25+ presets for Instagram, YouTube, Twitter, print, and web — or enter exact width × height in pixels." },
+            { title: "Set format and quality", description: "Choose JPEG, PNG, or WEBP. Adjust the quality slider (30–100%). WEBP gives the smallest file size; PNG is lossless." },
+            { title: "Download", description: "Click Resize Image — the browser processes it instantly. Click Download to save your file." },
+          ]}
+          tips={[
+            "Lock aspect ratio to avoid stretching or distortion",
+            "Use WEBP for web — up to 30% smaller than JPEG",
+            "PNG for logos and graphics with text or transparency",
+            "85–90% JPEG quality is the sweet spot for photos",
+            "Downscale only — upscaling always reduces sharpness",
+          ]}
+          faqs={[
+            { question: "Does resizing reduce quality?", answer: "Downscaling is near-lossless in JPEG and fully lossless in PNG. Upscaling always reduces sharpness — avoid it when possible." },
+            { question: "Is my image uploaded to a server?", answer: "No. All processing runs entirely in your browser using the Canvas API. Nothing is sent to any server." },
+            { question: "Is there a maximum file size?", answer: "No enforced limit — your browser's available memory is the only constraint. Most modern devices handle images up to 50 MB easily." },
+          ]}
+        >
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">Social Media Size Reference 2026</p>
+            <div className="overflow-x-auto rounded-xl border border-gray-100 dark:border-gray-800">
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="bg-gray-50 dark:bg-gray-800/60 text-left">
+                    <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Platform</th>
+                    <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Size (px)</th>
+                    <th className="px-4 py-3 font-semibold text-gray-700 dark:text-gray-200">Format</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-100 dark:divide-gray-800">
+                  {[
+                    ["Instagram Post", "1080 × 1080", "JPEG"],
+                    ["Instagram Story / Reel", "1080 × 1920", "JPEG"],
+                    ["Twitter/X Post", "1200 × 675", "JPEG / WEBP"],
+                    ["YouTube Thumbnail", "1280 × 720", "JPEG"],
+                    ["Facebook Cover", "851 × 315", "JPEG"],
+                    ["LinkedIn Post", "1200 × 628", "JPEG"],
+                    ["WhatsApp Profile Photo", "500 × 500", "JPEG / PNG"],
+                    ["TikTok Thumbnail", "1080 × 1920", "JPEG"],
+                  ].map(([platform, size, fmt], i) => (
+                    <tr key={i} className="bg-white dark:bg-gray-900 hover:bg-gray-50 dark:hover:bg-gray-800/40 transition-colors">
+                      <td className="px-4 py-3 text-gray-800 dark:text-gray-200">{platform}</td>
+                      <td className="px-4 py-3 font-mono text-gray-500 dark:text-gray-400">{size}</td>
+                      <td className="px-4 py-3 text-gray-500 dark:text-gray-400">{fmt}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
+        </ToolArticle>
       </ToolLayout>
     </>
   );

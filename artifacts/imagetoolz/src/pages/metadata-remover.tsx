@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { ToolArticle } from "@/components/tool-article";
 import { Helmet } from "react-helmet-async";
 import { ToolLayout } from "@/components/tool-layout";
 import { FileUploader } from "@/components/file-uploader";
@@ -118,47 +119,28 @@ export default function MetadataRemover() {
           </>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">Why Remove Image Metadata?</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">What Is EXIF Metadata?</h3>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                  EXIF (Exchangeable Image File Format) metadata is hidden data embedded in every photo taken by a smartphone or digital camera. This data can include your <strong>exact GPS coordinates</strong>, the make and model of your camera/phone, the date and time the photo was taken, camera settings (ISO, aperture, shutter speed), and even your device's serial number.
-                </p>
-                <p className="text-gray-600 dark:text-gray-300 leading-relaxed mt-3">
-                  When you share photos online — on social media, via email, or in documents — this hidden data often travels with the image, potentially revealing your location or personal information to anyone who views it.
-                </p>
-              </article>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                {[
-                  { t: "Privacy Protection", d: "Prevent strangers from seeing where you live, work, or travel based on GPS data in your photos." },
-                  { t: "Safe Sharing", d: "Share photos on public forums, marketplaces, or social media without exposing personal data." },
-                  { t: "Professional Use", d: "Remove client or location data before sharing images with third parties or publishing online." },
-                  { t: "Smaller File Size", d: "Removing metadata can slightly reduce file size, especially for images with large EXIF blocks." },
-                ].map((item) => (
-                  <div key={item.t} className="p-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg">
-                    <p className="font-semibold text-gray-900 dark:text-white text-sm mb-1">{item.t}</p>
-                    <p className="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">{item.d}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div>
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Always remove metadata before:</h3>
-                <ul className="space-y-2.5">
-                  {["Posting on social media", "Selling photos online", "Sharing your home address", "Sending to strangers", "Publishing on websites"].map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="Why Remove Image Metadata?"
+          subheading="Every photo you take contains hidden data — GPS location, device info, timestamps. This tool strips it all."
+          steps={[
+            { title: "Upload your image", description: "Select a JPG, PNG, or WEBP file from your device. The original file is never modified." },
+            { title: "Metadata is detected", description: "The tool reads embedded EXIF data — GPS coordinates, camera model, timestamps, and more." },
+            { title: "All metadata is stripped", description: "A clean copy of your image is created with all hidden data removed — no traces left." },
+            { title: "Download the clean image", description: "Click Download to save the metadata-free version. Image quality is fully preserved." },
+          ]}
+          tips={[
+            "Always remove metadata before posting photos publicly online",
+            "GPS data in photos can reveal your home, workplace, or travel routes",
+            "Metadata is invisible — you can't see it, but others can extract it",
+            "Removing metadata may slightly reduce file size",
+            "Use on photos taken with smartphones — they embed the most data",
+          ]}
+          faqs={[
+            { question: "What data is removed?", answer: "GPS coordinates, camera make/model, date and time, ISO/aperture settings, device serial number, and all other EXIF/IPTC tags." },
+            { question: "Does removing metadata affect image quality?", answer: "No. Only the hidden data is removed. The visible image pixels are completely unchanged." },
+            { question: "Is my photo uploaded to a server?", answer: "Never. All processing happens entirely in your browser. Your photos never leave your device." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

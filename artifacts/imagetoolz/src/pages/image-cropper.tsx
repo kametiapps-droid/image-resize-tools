@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
-import { RefreshCw, CheckCircle2, Move } from "lucide-react";
+import { RefreshCw, Move } from "lucide-react";
+import { ToolArticle } from "@/components/tool-article";
 import { useRecordToolUse } from "@workspace/api-client-react";
 
 type Step = "idle" | "loading" | "settings" | "processing" | "done";
@@ -237,77 +238,28 @@ export default function ImageCropper() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">How to Crop Images Online</h2>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-6">
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Step-by-Step</h3>
-                <ol className="space-y-3">
-                  {[
-                    { n: "1", t: "Upload your image", d: "Drag & drop or click Select File — JPG, PNG, WEBP, GIF supported." },
-                    { n: "2", t: "Drag the crop box", d: "The green box is your crop area. Drag it over the part you want to keep." },
-                    { n: "3", t: "Fine-tune with numbers", d: "Enter exact pixel values for position and size, or use the quick aspect ratio buttons." },
-                    { n: "4", t: "Crop & Download", d: "Click Crop Image to process and show the download page with your cropped image." },
-                  ].map((s) => (
-                    <li key={s.n} className="flex gap-4">
-                      <span className="w-8 h-8 rounded-full bg-green-600 text-white text-sm font-bold flex items-center justify-center shrink-0">{s.n}</span>
-                      <div><p className="font-semibold text-gray-900 dark:text-white">{s.t}</p><p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">{s.d}</p></div>
-                    </li>
-                  ))}
-                </ol>
-              </article>
-              <article>
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-3">Ideal Crop Sizes by Platform</h3>
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm border-collapse">
-                    <thead>
-                      <tr className="bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-600">
-                        <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-200 dark:border-gray-600">Platform</th>
-                        <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200 border-r border-gray-200 dark:border-gray-600">Dimensions</th>
-                        <th className="text-left px-4 py-2 font-semibold text-gray-700 dark:text-gray-200">Ratio</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[
-                        ["Instagram Square", "1080 × 1080 px", "1:1"],
-                        ["Instagram Story", "1080 × 1920 px", "9:16"],
-                        ["Twitter/X Post", "1200 × 675 px", "16:9"],
-                        ["YouTube Thumbnail", "1280 × 720 px", "16:9"],
-                        ["Facebook Post", "1200 × 630 px", "1.91:1"],
-                        ["Pinterest Pin", "1000 × 1500 px", "2:3"],
-                      ].map(([p, d, r], i) => (
-                        <tr key={i} className={`border border-gray-200 dark:border-gray-600 ${i % 2 === 0 ? "bg-white dark:bg-gray-900" : "bg-gray-50/50 dark:bg-gray-800/50"}`}>
-                          <td className="px-4 py-2 text-gray-700 dark:text-gray-300 border-r border-gray-200 dark:border-gray-600">{p}</td>
-                          <td className="px-4 py-2 font-mono text-gray-600 dark:text-gray-400 border-r border-gray-200 dark:border-gray-600">{d}</td>
-                          <td className="px-4 py-2 text-gray-500 dark:text-gray-400">{r}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </article>
-            </div>
-            <div>
-              <div className="bg-green-50 dark:bg-green-950/30 border border-green-100 dark:border-green-900 rounded-xl p-5">
-                <h3 className="font-semibold text-gray-900 dark:text-white mb-3">Pro Tips</h3>
-                <ul className="space-y-2.5">
-                  {[
-                    "Rule of Thirds — place subjects off-center",
-                    "Use quick ratio buttons for exact ratios",
-                    "Cropping doesn't reduce remaining quality",
-                    "For products: leave space around the subject",
-                    "Green guide lines show Rule of Thirds grid",
-                  ].map((t, i) => (
-                    <li key={i} className="flex items-start gap-2 text-sm text-gray-600 dark:text-gray-300">
-                      <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0 mt-0.5" />{t}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ToolArticle
+          heading="How to Crop Images Online"
+          subheading="Remove unwanted areas, change aspect ratios, and focus on what matters — no software needed."
+          steps={[
+            { title: "Upload your image", description: "Drag & drop or click Select File — JPG, PNG, WEBP, and GIF all supported." },
+            { title: "Drag the crop box", description: "The green box is your crop area. Drag it to select exactly the region you want to keep." },
+            { title: "Fine-tune with numbers", description: "Enter exact pixel values for X, Y, width, and height — or use the quick aspect ratio buttons (1:1, 16:9, etc.)." },
+            { title: "Crop & Download", description: "Click Crop Image. The result is shown instantly — click Download to save." },
+          ]}
+          tips={[
+            "Rule of Thirds — place your subject off-center for better composition",
+            "Use the 1:1 ratio for Instagram, 16:9 for YouTube thumbnails",
+            "Cropping never reduces the quality of the remaining area",
+            "For product photos: leave breathing room around the subject",
+            "Combine with Image Resizer for perfect final dimensions",
+          ]}
+          faqs={[
+            { question: "Does cropping reduce image quality?", answer: "No. Cropping only removes pixels outside your selection. The remaining image quality is unchanged." },
+            { question: "Can I enter exact crop coordinates?", answer: "Yes — use the X, Y, Width, and Height inputs on the right panel for pixel-perfect control." },
+            { question: "Is my image sent to a server?", answer: "Never. All cropping happens locally in your browser using the Canvas API." },
+          ]}
+        />
       </ToolLayout>
     </>
   );
