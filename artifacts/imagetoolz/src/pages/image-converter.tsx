@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 import { RefreshCw, CheckCircle2 } from "lucide-react";
 import { useRecordToolUse } from "@workspace/api-client-react";
+import { ToolArticle } from "@/components/tool-article";
 
 type Step = "idle" | "loading" | "settings" | "processing" | "done";
 
@@ -73,9 +74,22 @@ export default function ImageConverter() {
   return (
     <>
       <Helmet>
-        <title>Free Image Converter - Convert JPEG PNG WEBP GIF Online | CropImages</title>
-        <meta name="description" content="Convert images between JPEG, PNG, WEBP, and GIF formats online for free. Instant browser-based conversion — no upload, no signup required." />
-        <link rel="canonical" href="https://cropimages.store/tools/image-converter" />
+        <title>Free Image Converter — Convert JPG to PNG, PNG to WEBP Online | Image Resize</title>
+        <meta name="description" content="Convert images between JPEG, PNG, WEBP, and GIF formats online for free. Convert JPG to PNG, PNG to WEBP without quality loss — instant, browser-based, no upload required." />
+        <link rel="canonical" href="https://imageresize.app/tools/image-converter" />
+        <meta property="og:title" content="Free Image Converter — Image Resize" />
+        <meta property="og:description" content="Convert JPG to PNG, PNG to WEBP, or any image format instantly. Free, browser-based, no upload." />
+        <meta property="og:url" content="https://imageresize.app/tools/image-converter" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Image Converter",
+          "description": "Free online image format converter — convert between JPEG, PNG, WEBP, and GIF instantly in your browser.",
+          "url": "https://imageresize.app/tools/image-converter",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="image-converter" title="Image Converter" description="Convert between JPEG, PNG, WEBP, and GIF — instantly in your browser, no upload needed." pageTitle="Image Converter">
         <canvas ref={canvasRef} className="hidden" />
@@ -151,23 +165,34 @@ export default function ImageConverter() {
           </div>
         )}
 
-        <div className="mt-14 border-t border-gray-200 dark:border-gray-700 pt-10">
-          <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-4">JPEG vs PNG vs WEBP — Which Format to Use?</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            {[
-              { f: "JPEG", pro: "Smallest file size for photos", con: "Lossy — slight quality loss", use: "Photos, social media, email" },
-              { f: "PNG", pro: "Lossless — perfect quality", con: "Larger file size than JPEG", use: "Logos, screenshots, graphics with text" },
-              { f: "WEBP", pro: "Best compression + quality ratio", con: "Not supported in old email clients", use: "Websites, web apps, modern platforms" },
-            ].map((item) => (
-              <div key={item.f} className="p-5 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl">
-                <p className="font-bold text-gray-900 dark:text-white text-lg mb-2">{item.f}</p>
-                <p className="text-xs text-green-600 dark:text-green-400 mb-1">✓ {item.pro}</p>
-                <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">✗ {item.con}</p>
-                <p className="text-xs font-medium text-gray-600 dark:text-gray-300">Best for: {item.use}</p>
-              </div>
-            ))}
-          </div>
-        </div>
+        <ToolArticle
+          heading="JPEG vs PNG vs WEBP vs GIF — Which Format to Choose?"
+          subheading="Each image format has distinct strengths. Understanding them helps you pick the right one for every use case."
+          body={[
+            "Image format selection is one of the most impactful technical decisions in web development, digital marketing, and content creation — yet it is frequently made by habit rather than by understanding. The difference between the right format and the wrong one for your use case can be a 5× difference in file size (affecting page speed and hosting costs) or visible quality degradation (affecting brand perception and user experience). Here is everything you need to know to consistently pick the correct format.",
+            "JPEG (Joint Photographic Experts Group) is the standard format for photographs. It uses lossy compression that analyzes image data in 8×8 pixel blocks, removes high-frequency information the eye is least sensitive to, and achieves dramatic size reduction. At 85% quality, a photo compressed as JPEG looks identical to the original on screen but is 80–90% smaller. At 70% quality, minor artifacts appear in smooth gradients and around hard edges. Below 60%, visible blocking artifacts (the classic 'JPEG artifacts') appear. Use JPEG for: product photos, blog post images, social media photography, email images, and any photograph where file size matters.",
+            "PNG (Portable Network Graphics) uses lossless compression — the output file is pixel-for-pixel identical to the input, with zero quality loss. PNG also supports transparency (alpha channel) — pixels can be fully transparent, fully opaque, or any level in between. This is essential for logos, icons, interface elements, and any graphic that needs to be placed over a colored background without a white rectangle border. PNG compression is typically 10–40% and is most effective on images with large flat-color areas and sharp edges. Use PNG for: logos, icons, screenshots, interface graphics, images with text, and any graphic requiring transparency.",
+            "WEBP is a modern format developed by Google that supports both lossy and lossless compression, plus transparency. In lossy mode, WEBP produces files 25–34% smaller than JPEG at equivalent visual quality. In lossless mode, WEBP is 26% smaller than PNG. All modern browsers support WEBP in 2026. The main limitation: WEBP is not supported in very old email clients (Outlook 2019 and earlier). For websites, WEBP is the optimal format for virtually everything. GIF supports animation and is limited to 256 colors — only use GIF for simple animated graphics where WEBP animated is not accepted.",
+          ]}
+          steps={[
+            { title: "Upload your image", description: "Drag & drop or click to select — JPG, PNG, WEBP, or GIF all supported as input." },
+            { title: "Select target format", description: "Choose JPEG (photos), PNG (transparency/lossless), WEBP (web-optimized), or GIF (animations)." },
+            { title: "Convert instantly", description: "Click the Convert button — your browser processes the conversion using the Canvas API." },
+            { title: "Download", description: "Your converted file downloads immediately. No upload, no server, completely private." },
+          ]}
+          tips={[
+            "WEBP gives 25-34% smaller files than JPEG at the same visual quality",
+            "Always use PNG for logos and graphics with transparent backgrounds",
+            "JPEG at 80-85% quality is indistinguishable from 100% quality on screen",
+            "Convert photos to WEBP for websites to improve Core Web Vitals scores",
+            "GIF is only needed for very simple animations — otherwise use WEBP",
+          ]}
+          faqs={[
+            { question: "Does converting JPEG to PNG improve quality?", answer: "No. Converting from a lossy format (JPEG) to lossless (PNG) does not restore quality lost in the original JPEG compression. It only prevents additional quality loss in future saves." },
+            { question: "Can I convert PNG to JPEG without quality loss?", answer: "PNG to JPEG conversion is lossy — you choose the quality level. At 85-90%, results are visually identical to the PNG on screen but significantly smaller." },
+            { question: "Is WEBP supported everywhere?", answer: "All modern browsers (Chrome, Firefox, Safari, Edge) support WEBP. The main exception is very old email clients like Outlook 2019. For websites and apps in 2026, WEBP is fully safe to use." },
+          ]}
+        />
       </ToolLayout>
     </>
   );

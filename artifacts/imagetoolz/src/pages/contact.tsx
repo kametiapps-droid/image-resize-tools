@@ -4,8 +4,8 @@ import { Mail, MessageCircle, Bug, Lightbulb, Clock, MapPin } from "lucide-react
 
 const EMAIL  = "iftechstudio@gmail.com";
 const AUTHOR = "If Tech Studio";
-const SITE   = "CropImages";
-const DOMAIN = "cropimages.store";
+const SITE   = "Image Resize";
+const DOMAIN = "imageresize.app";
 
 const topics = [
   { icon: Bug,           title: "Report a Bug",       desc: "Found something that doesn't work correctly? Include your browser name, operating system, and what happened." },
@@ -18,12 +18,12 @@ export default function Contact() {
   return (
     <>
       <Helmet>
-        <title>Contact Us — CropImages | If Tech Studio</title>
-        <meta name="description" content="Contact If Tech Studio — the team behind CropImages. Report bugs, suggest features, or send general inquiries to iftechstudio@gmail.com. We respond within 1–2 business days." />
-        <link rel="canonical" href="https://cropimages.store/contact" />
-        <meta property="og:title" content="Contact CropImages — If Tech Studio" />
-        <meta property="og:description" content="Get in touch with the CropImages team at iftechstudio@gmail.com. We respond to all messages within 1–2 business days." />
-        <meta property="og:url" content="https://cropimages.store/contact" />
+        <title>Contact Us — Image Resize | If Tech Studio</title>
+        <meta name="description" content="Contact If Tech Studio — the team behind Image Resize. Report bugs, suggest features, or send general inquiries to iftechstudio@gmail.com. We respond within 1–2 business days." />
+        <link rel="canonical" href="https://imageresize.app/contact" />
+        <meta property="og:title" content="Contact Image Resize — If Tech Studio" />
+        <meta property="og:description" content="Get in touch with the Image Resize team at iftechstudio@gmail.com. We respond to all messages within 1–2 business days." />
+        <meta property="og:url" content="https://imageresize.app/contact" />
       </Helmet>
       <Layout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">

@@ -6,8 +6,8 @@ import {
 } from "lucide-react";
 import { Link } from "wouter";
 
-const SITE   = "CropImages";
-const DOMAIN = "cropimages.store";
+const SITE   = "Image Resize";
+const DOMAIN = "imageresize.app";
 const EMAIL  = "iftechstudio@gmail.com";
 const AUTHOR = "If Tech Studio";
 
@@ -26,20 +26,20 @@ const tools = [
 const values = [
   { icon: Shield, title: "Privacy First",      desc: "Your images never leave your device. Every tool runs entirely in your browser using the HTML5 Canvas API — zero server uploads." },
   { icon: Zap,    title: "Speed & Simplicity", desc: "No account creation, no waiting for uploads, no hidden fees. Open a tool, drop your image, get your result. That's it." },
-  { icon: Heart,  title: "Always Free",        desc: "CropImages is and always will be free. We sustain the service through tasteful, non-intrusive advertising. No paywalls, no watermarks on output." },
-  { icon: Globe,  title: "Works Everywhere",   desc: "Built with modern web standards, CropImages works on any device and any modern browser — desktop, tablet, or mobile." },
+  { icon: Heart,  title: "Always Free",        desc: "Image Resize is and always will be free. We sustain the service through tasteful, non-intrusive advertising. No paywalls, no watermarks on output." },
+  { icon: Globe,  title: "Works Everywhere",   desc: "Built with modern web standards, Image Resize works on any device and any modern browser — desktop, tablet, or mobile." },
 ];
 
 export default function About() {
   return (
     <>
       <Helmet>
-        <title>About CropImages — Free Browser-Based Image Tools | If Tech Studio</title>
-        <meta name="description" content="Learn about CropImages — 9 free browser-based image tools built by If Tech Studio. Resize, compress, convert, crop, watermark images 100% privately in your browser." />
-        <link rel="canonical" href="https://cropimages.store/about" />
-        <meta property="og:title" content="About CropImages — Free Image Tools by If Tech Studio" />
-        <meta property="og:description" content="CropImages is a free suite of 9 image processing tools that run entirely in your browser. No uploads, no account, always free." />
-        <meta property="og:url" content="https://cropimages.store/about" />
+        <title>About Image Resize — Free Browser-Based Image Tools | If Tech Studio</title>
+        <meta name="description" content="Learn about Image Resize — 9 free browser-based image tools built by If Tech Studio. Resize, compress, convert, crop, watermark images 100% privately in your browser. No uploads, no account required." />
+        <link rel="canonical" href="https://imageresize.app/about" />
+        <meta property="og:title" content="About Image Resize — Free Image Tools by If Tech Studio" />
+        <meta property="og:description" content="Image Resize is a free suite of 9 image processing tools that run entirely in your browser. No uploads, no account, always free." />
+        <meta property="og:url" content="https://imageresize.app/about" />
       </Helmet>
       <Layout>
         {/* Hero */}

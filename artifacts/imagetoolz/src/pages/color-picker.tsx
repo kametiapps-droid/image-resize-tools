@@ -14,6 +14,7 @@ import { useToast } from "@/hooks/use-toast";
 type Step = "idle" | "loading" | "picking";
 type ColorResult = { hex: string; rgb: string; hsl: string; r: number; g: number; b: number };
 
+
 export default function ColorPicker() {
   const [step, setStep] = useState<Step>("idle");
   const [file, setFile] = useState<File | null>(null);
@@ -103,9 +104,22 @@ export default function ColorPicker() {
   return (
     <>
       <Helmet>
-        <title>Free Color Picker - Extract Colors from Images | CropImages</title>
-        <meta name="description" content="Pick colors from any image online for free. Get HEX, RGB, and HSL values instantly by clicking anywhere on your image. 100% browser-based." />
-        <link rel="canonical" href="https://cropimages.store/tools/color-picker" />
+        <title>Free Color Picker — Extract HEX, RGB, HSL Colors from Any Image | Image Resize</title>
+        <meta name="description" content="Pick exact colors from any image online free. Get HEX, RGB, and HSL color codes instantly by clicking any pixel. Extract brand colors, build palettes — no upload, no signup." />
+        <link rel="canonical" href="https://imageresize.app/tools/color-picker" />
+        <meta property="og:title" content="Free Color Picker from Image — Image Resize" />
+        <meta property="og:description" content="Extract HEX, RGB, HSL color codes from any image by clicking. Free, browser-based, instant — no upload needed." />
+        <meta property="og:url" content="https://imageresize.app/tools/color-picker" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Color Picker from Image",
+          "description": "Free online color picker — click any pixel in any image to get HEX, RGB, and HSL color values instantly.",
+          "url": "https://imageresize.app/tools/color-picker",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="color-picker" title="Color Picker" description="Click anywhere on your image to extract exact HEX, RGB, and HSL color values — instantly." pageTitle="Color Picker">
 
@@ -193,6 +207,13 @@ export default function ColorPicker() {
         <ToolArticle
           heading="How to Pick Colors from Images"
           subheading="Click anywhere on any image to extract exact HEX, RGB, and HSL color values — instantly."
+          body={[
+            "Color picking is an essential skill in web development, graphic design, UI/UX design, and brand work. When you see a color you want to match — in a logo, a photograph, a competitor's website, a design reference — you need the exact color code in the format your tool accepts. CSS accepts HEX (#3b82f6) or RGB (rgb(59, 130, 246)) or HSL values. Figma and Sketch accept HEX or RGB. Photoshop and Illustrator use RGB values in their color pickers. Our tool gives you all three formats simultaneously with a single click on any pixel of any image.",
+            "The most common use case is brand color matching. A client gives you their logo as a JPEG or PNG, and you need to match the exact green from their logo for a website header, button color, or email template. Instead of guessing or using an imprecise approximation, upload the logo to our color picker, click on the exact shade of green, and get the precise HEX value (#22c55e, not just 'some green'). This eliminates the color inconsistency that undermines brand professionalism across digital touchpoints.",
+            "<strong>Understanding the Three Color Formats:</strong> HEX (#rrggbb) is the six-character hexadecimal representation used in CSS, HTML, and most web design tools. It encodes red, green, and blue values each from 00 (zero intensity) to ff (full intensity). HEX is the default format in CSS, Tailwind CSS, and web design tools. RGB (red, green, blue) expresses the same three channels as decimal numbers from 0 to 255. This is the format used natively by most design software color pickers and directly in CSS's rgb() function. HSL (hue, saturation, lightness) is the most human-intuitive format — hue is the color on the color wheel (0–360°), saturation is the color intensity (0% gray to 100% vivid), and lightness is how light or dark the color is (0% black to 100% white). HSL is the easiest format for programmatically generating color variations: lighten by adding 10 to L, desaturate by reducing S.",
+            "<strong>Building a Color Palette from Images:</strong> Our tool saves your last 8 picked colors in the history panel below the picker. This makes it easy to build a complete color palette from a single image — pick the primary brand color, the secondary accent, background tones, and text colors, then compare them side-by-side in the history swatches. This workflow replaces manual eyedropper tools in Photoshop for quick palette extraction without leaving your browser.",
+            "<strong>Accuracy and Rendering:</strong> Color picking uses the HTML5 Canvas API's getImageData() function, which reads the exact rendered pixel color at the clicked coordinate. On standard sRGB displays (the vast majority of monitors and screens), values are accurate to within 1-2 units per channel. Note that display color profiles, browser rendering, and gamma settings can affect perceived color on wide-gamut (P3) displays — if color accuracy is critical for print production, verify colors in a color-managed application like Photoshop with the correct ICC profile.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Select any JPG, PNG, WEBP, or GIF file — a logo, screenshot, photo, or design reference." },
             { title: "Click anywhere on the image", description: "Your cursor becomes a crosshair. Click any pixel to extract its exact color value." },

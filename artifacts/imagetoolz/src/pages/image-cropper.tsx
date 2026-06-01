@@ -133,9 +133,22 @@ export default function ImageCropper() {
   return (
     <>
       <Helmet>
-        <title>Free Image Cropper - Crop Images Online | CropImages</title>
-        <meta name="description" content="Crop images online for free with a drag-and-drop crop tool. Set exact pixel dimensions or drag visually. 100% browser-based — no upload, instant result." />
-        <link rel="canonical" href="https://cropimages.store/tools/image-cropper" />
+        <title>Free Image Cropper — Crop Photos Online for Instagram, Social Media | Image Resize</title>
+        <meta name="description" content="Crop images online free with drag-and-drop. Crop photos for Instagram, YouTube, and any social media platform. Set exact pixel dimensions or drag visually — no upload needed." />
+        <link rel="canonical" href="https://imageresize.app/tools/image-cropper" />
+        <meta property="og:title" content="Free Image Cropper — Image Resize" />
+        <meta property="og:description" content="Crop photos for Instagram, YouTube, and social media. Drag-and-drop crop tool with aspect ratio presets — free, instant, private." />
+        <meta property="og:url" content="https://imageresize.app/tools/image-cropper" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Image Cropper",
+          "description": "Free online image cropper — crop photos with drag-and-drop, aspect ratio presets, and exact pixel dimensions.",
+          "url": "https://imageresize.app/tools/image-cropper",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="image-cropper" title="Image Cropper" description="Drag and crop any part of your image with a visual crop tool — or enter exact pixel values for precision." pageTitle="Image Cropper">
 
@@ -241,6 +254,13 @@ export default function ImageCropper() {
         <ToolArticle
           heading="How to Crop Images Online"
           subheading="Remove unwanted areas, change aspect ratios, and focus on what matters — no software needed."
+          body={[
+            "Cropping is one of the most powerful composition tools in photography and digital design. By selecting exactly the portion of an image you want to keep and discarding the rest, you can dramatically improve the visual impact of any photo. Good cropping eliminates distracting background elements, tightens the frame around your subject, changes the aspect ratio for different platforms, and creates stronger compositions using principles like the rule of thirds and negative space.",
+            "Every major social media platform enforces different aspect ratios, and posting an image with the wrong dimensions means the platform's algorithm will auto-crop it — often cutting off faces, titles, or product details in ways you cannot control. Instagram's feed displays images at 4:5 portrait (1080×1350px) for maximum screen real estate, 1:1 square (1080×1080px) for the profile grid, and 9:16 (1080×1920px) for Stories and Reels. Twitter/X displays timeline images at 16:9 (1200×675px) and auto-crops anything that doesn't match. YouTube thumbnails are 16:9 (1280×720px). Cropping your images to the exact required aspect ratio before uploading guarantees they display exactly as intended on every platform.",
+            "The rule of thirds is the most important composition principle for cropping. Imagine your image divided by two horizontal and two vertical lines into a 3×3 grid. The four intersection points of these lines — called 'power points' — are where your subject should ideally be placed. A portrait with the subject's eyes at the upper third intersection looks more dynamic and natural than a centered portrait. A landscape with the horizon at the bottom third instead of center creates a stronger sky or foreground. When cropping, try to position your main subject at one of these power points rather than dead-center.",
+            "<strong>Platform-Specific Crop Ratios for 2026:</strong> Instagram Post: 4:5 (portrait) or 1:1 (square). Instagram Story/Reel: 9:16. Twitter/X: 16:9. YouTube Thumbnail: 16:9. TikTok: 9:16. LinkedIn Post: 1.91:1 (approximately). Facebook Post: 1.91:1. Profile photos (all platforms): 1:1 square. Our crop tool includes quick aspect ratio buttons for 1:1, 4:3, 16:9, 9:16, and 3:2 — the most commonly needed ratios. You can also enter exact pixel dimensions for precise control.",
+            "<strong>Technical Notes:</strong> Cropping is a non-destructive operation on the image quality of the kept region — only pixels outside the crop box are removed. The remaining pixels are unchanged at full quality. All processing happens locally in your browser using the Canvas API — your original file is never modified and never leaves your device. The crop tool supports JPG, PNG, WEBP, and GIF input formats and outputs in the same format as the input.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Drag & drop or click Select File — JPG, PNG, WEBP, and GIF all supported." },
             { title: "Drag the crop box", description: "The green box is your crop area. Drag it to select exactly the region you want to keep." },

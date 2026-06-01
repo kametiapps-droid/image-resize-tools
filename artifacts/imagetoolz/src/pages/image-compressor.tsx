@@ -64,9 +64,22 @@ export default function ImageCompressor() {
   return (
     <>
       <Helmet>
-        <title>Free Image Compressor - Reduce Image Size Online | CropImages</title>
-        <meta name="description" content="Compress images online for free. Reduce JPEG, PNG, WEBP file size by up to 80% without visible quality loss. 100% browser-based, no upload." />
-        <link rel="canonical" href="https://cropimages.store/tools/image-compressor" />
+        <title>Free Image Compressor — Reduce Image File Size Without Losing Quality | Image Resize</title>
+        <meta name="description" content="Compress JPEG, PNG, WEBP images online free. Reduce file size by up to 80% without visible quality loss. Compress images below 100KB — 100% browser-based, no upload, instant." />
+        <link rel="canonical" href="https://imageresize.app/tools/image-compressor" />
+        <meta property="og:title" content="Free Image Compressor — Image Resize" />
+        <meta property="og:description" content="Reduce image file size by 40–80% without visible quality loss. Compress JPEG, PNG, WEBP free online — no upload needed." />
+        <meta property="og:url" content="https://imageresize.app/tools/image-compressor" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Image Compressor",
+          "description": "Free online image compressor — reduce JPEG, PNG, WEBP file size by up to 80% without quality loss.",
+          "url": "https://imageresize.app/tools/image-compressor",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="image-compressor" title="Image Compressor" description="Reduce image file size by up to 80% — keep it looking great for web, email, and social media." pageTitle="Image Compressor">
         {step === "idle" && <FileUploader onUpload={handleUpload} />}
@@ -148,6 +161,13 @@ export default function ImageCompressor() {
         <ToolArticle
           heading="How to Compress Images Without Losing Quality"
           subheading="Reduce file size while keeping your images looking sharp — entirely in your browser."
+          body={[
+            "Image compression is the single most impactful optimization you can make for your website's speed, your email deliverability, and your storage costs. A modern smartphone photo is typically 3–12 MB in size. The same photo, properly compressed for web display, can be 150–400 KB — an 80–95% reduction with zero visible quality difference when viewed on screen. Google's search ranking algorithm directly rewards faster-loading pages, and the biggest cause of slow websites is always unoptimized images.",
+            "There are two types of image compression: lossy and lossless. Lossy compression (used by JPEG and WEBP) permanently removes image data that the human eye is least sensitive to — fine texture detail, subtle color gradations in shadows, and frequency information that our visual system discards anyway. At 75–85% quality, the removed information is imperceptible. Below 60%, you start to see 'JPEG artifacts' — blocky distortions around edges and text. Lossless compression (used by PNG) reorganizes the binary data without discarding anything — you get a smaller file that is pixel-for-pixel identical to the original. PNG compression is typically 10–30% and produces lossless results.",
+            "The best compression strategy depends on what the image contains. For photographs of people, landscapes, products, and food — use JPEG at 75–85% or WEBP at 75–80%. The complex color variation in photographs is exactly what JPEG's algorithm handles most efficiently. For screenshots, interface graphics, diagrams, logos, and images with text — use PNG. The flat colors and sharp edges in these images compress well losslessly, and any lossy compression creates visible artifacts around text and lines. For website images where you want the smallest possible file — use WEBP. It supports both lossy and lossless modes and is universally supported in 2026.",
+            "<strong>Target File Sizes for Common Use Cases:</strong> Blog post featured image: 80–200 KB (aim for under 100 KB for maximum PageSpeed score). E-commerce product photo: 100–300 KB depending on zoom requirements. Email newsletter inline image: under 100 KB. Social media upload: under 1 MB (platforms compress again anyway). Website hero/banner: 150–400 KB. Thumbnail or avatar: under 30 KB. Profile photos: 20–50 KB. These targets assume the image is also appropriately resized — a product photo displayed at 800px wide should be resized to 800–1200px before compression, not compressed from 4000px.",
+            "<strong>Stripping Metadata During Compression:</strong> EXIF metadata embedded in photos by cameras and smartphones adds 5–50 KB of hidden data to every image file. This data (GPS location, camera model, timestamps, settings) is invisible to viewers but every visitor's browser must download it. Our compression tool strips all metadata automatically, giving you slightly smaller files and eliminating any privacy concerns about GPS coordinates embedded in images you publish.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Select a JPG, PNG, WEBP, or GIF file. Your image stays on your device — nothing is uploaded." },
             { title: "Set the quality level", description: "Use the quality slider (10–100%). For photos, 75–85% gives the best size-to-quality ratio." },

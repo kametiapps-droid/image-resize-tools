@@ -2,8 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { Layout } from "@/components/layout";
 import { Shield, Lock, Eye, Server, UserX, Mail } from "lucide-react";
 
-const SITE   = "CropImages";
-const DOMAIN = "cropimages.store";
+const SITE   = "Image Resize";
+const DOMAIN = "imageresize.app";
 const EMAIL  = "iftechstudio@gmail.com";
 const AUTHOR = "If Tech Studio";
 
@@ -11,12 +11,12 @@ export default function Privacy() {
   return (
     <>
       <Helmet>
-        <title>Privacy Policy — CropImages | If Tech Studio</title>
-        <meta name="description" content="CropImages Privacy Policy — your images are never uploaded to any server. All processing happens locally in your browser. No personal data collected. Read our full policy." />
-        <link rel="canonical" href="https://cropimages.store/privacy" />
-        <meta property="og:title" content="Privacy Policy — CropImages" />
-        <meta property="og:description" content="Your images never leave your device. CropImages processes everything locally in your browser. Read our full privacy policy." />
-        <meta property="og:url" content="https://cropimages.store/privacy" />
+        <title>Privacy Policy — Image Resize | If Tech Studio</title>
+        <meta name="description" content="Image Resize Privacy Policy — your images are never uploaded to any server. All processing happens locally in your browser. No personal data collected. Read our full policy." />
+        <link rel="canonical" href="https://imageresize.app/privacy" />
+        <meta property="og:title" content="Privacy Policy — Image Resize" />
+        <meta property="og:description" content="Your images never leave your device. Image Resize processes everything locally in your browser. Read our full privacy policy." />
+        <meta property="og:url" content="https://imageresize.app/privacy" />
       </Helmet>
       <Layout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">

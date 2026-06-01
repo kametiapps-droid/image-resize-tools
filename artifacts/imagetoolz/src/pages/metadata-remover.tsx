@@ -59,9 +59,22 @@ export default function MetadataRemover() {
   return (
     <>
       <Helmet>
-        <title>Free EXIF Metadata Remover - Strip GPS & Image Data | CropImages</title>
-        <meta name="description" content="Remove EXIF metadata, GPS location, and private data from images online for free. Protect your privacy before sharing photos. 100% browser-based." />
-        <link rel="canonical" href="https://cropimages.store/tools/metadata-remover" />
+        <title>Free EXIF Metadata Remover — Strip GPS Location from Photos Online | Image Resize</title>
+        <meta name="description" content="Remove GPS location, EXIF data, and all hidden metadata from images online free. Strip camera info, timestamps from photos before sharing. Browser-based, no upload, instant." />
+        <link rel="canonical" href="https://imageresize.app/tools/metadata-remover" />
+        <meta property="og:title" content="Free EXIF Metadata Remover — Image Resize" />
+        <meta property="og:description" content="Strip GPS location and all EXIF data from photos before sharing. Protect your privacy — free, browser-based, no upload." />
+        <meta property="og:url" content="https://imageresize.app/tools/metadata-remover" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "EXIF Metadata Remover",
+          "description": "Free online tool to remove GPS location, EXIF data, and all hidden metadata from images before sharing.",
+          "url": "https://imageresize.app/tools/metadata-remover",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="metadata-remover" title="Remove Image Metadata" description="Strip GPS location, camera data, and all hidden EXIF metadata from images before sharing. Instant & private." pageTitle="EXIF Metadata Remover">
 
@@ -122,6 +135,13 @@ export default function MetadataRemover() {
         <ToolArticle
           heading="Why Remove Image Metadata?"
           subheading="Every photo you take contains hidden data — GPS location, device info, timestamps. This tool strips it all."
+          body={[
+            "Every digital photo contains far more information than the visible image. Embedded in JPEG, TIFF, and sometimes PNG files is a hidden layer of data called EXIF (Exchangeable Image File Format) metadata. This data is written automatically by your camera or smartphone at the moment you take a photo, and it contains a detailed record of exactly when, where, and how the photo was taken. For casual personal use, this is harmless. But when you publish photos online, share them publicly, or send them to people you don't fully trust, EXIF metadata can reveal information you never intended to share.",
+            "The most serious privacy risk in image metadata is GPS location data. Modern smartphones embed precise GPS coordinates (latitude and longitude to within a few meters) in every photo taken with location services enabled. This means that a photo of your dog shared on Instagram, a selfie posted on Twitter, or a product photo uploaded to eBay can contain your exact home address — or the address of wherever you were when you took the photo. This information is invisible to casual viewers but trivially extractable by anyone with basic tools, including tools built into operating systems and available for free online.",
+            "<strong>What EXIF Data Is Stored in Your Photos:</strong> Location data (GPS latitude, longitude, altitude, and sometimes the city/country inferred from coordinates). Timestamp (the exact date and time the photo was taken, accurate to the second). Camera information (make, model, lens type, focal length, serial number). Exposure settings (ISO, aperture, shutter speed, white balance, flash mode). Thumbnail preview (a small copy of the image embedded in the file). Software (the app or operating system used to take or edit the photo). Copyright and artist fields (often blank, but can contain personal name or organization). Copyright notices embedded in professional cameras.",
+            "<strong>When You Must Remove Metadata:</strong> Before posting photos publicly on any social media platform. Before selling images through stock photo sites. Before submitting photos to contests or publications. When sharing photos with people you don't fully trust. Before using photos as profile pictures or avatars. When providing images for legal or official purposes where you don't want to reveal when and where they were taken. For business product photography — you don't want competitors extracting your production dates, camera equipment, or location.",
+            "<strong>How Metadata Removal Works:</strong> Our tool loads your image into the browser's Canvas API, draws the image pixel-by-pixel onto a fresh canvas, then exports the canvas as a new image file. This process creates a completely new file containing only the visible image pixels — none of the original file's metadata is present in the output. The visual image quality is preserved at maximum quality (quality=1.0 for JPEG output). The resulting file is typically slightly smaller than the original because the stripped metadata can be 5–50 KB. All processing is local — your photo never leaves your browser.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Select a JPG, PNG, or WEBP file from your device. The original file is never modified." },
             { title: "Metadata is detected", description: "The tool reads embedded EXIF data — GPS coordinates, camera model, timestamps, and more." },

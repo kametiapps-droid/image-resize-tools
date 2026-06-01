@@ -2,8 +2,8 @@ import { Helmet } from "react-helmet-async";
 import { Layout } from "@/components/layout";
 import { FileText, AlertTriangle, Scale, Globe, Ban } from "lucide-react";
 
-const SITE   = "CropImages";
-const DOMAIN = "cropimages.store";
+const SITE   = "Image Resize";
+const DOMAIN = "imageresize.app";
 const EMAIL  = "iftechstudio@gmail.com";
 const AUTHOR = "If Tech Studio";
 
@@ -11,12 +11,12 @@ export default function Terms() {
   return (
     <>
       <Helmet>
-        <title>Terms of Service — CropImages | If Tech Studio</title>
-        <meta name="description" content="CropImages Terms of Service — rules for using our free browser-based image tools. You retain full ownership of your images. No uploads to servers. Read the full terms." />
-        <link rel="canonical" href="https://cropimages.store/terms" />
-        <meta property="og:title" content="Terms of Service — CropImages" />
-        <meta property="og:description" content="Terms of Service for CropImages — free image processing tools by If Tech Studio. You own your images. No uploads. Always free." />
-        <meta property="og:url" content="https://cropimages.store/terms" />
+        <title>Terms of Service — Image Resize | If Tech Studio</title>
+        <meta name="description" content="Image Resize Terms of Service — rules for using our free browser-based image tools. You retain full ownership of your images. No uploads to servers. Read the full terms." />
+        <link rel="canonical" href="https://imageresize.app/terms" />
+        <meta property="og:title" content="Terms of Service — Image Resize" />
+        <meta property="og:description" content="Terms of Service for Image Resize — free image processing tools by If Tech Studio. You own your images. No uploads. Always free." />
+        <meta property="og:url" content="https://imageresize.app/terms" />
       </Helmet>
       <Layout>
         <div className="max-w-4xl mx-auto px-4 sm:px-6 py-14">

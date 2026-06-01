@@ -102,9 +102,22 @@ export default function ImageToPdf() {
   return (
     <>
       <Helmet>
-        <title>Free Image to PDF Converter - Combine Images into PDF | CropImages</title>
-        <meta name="description" content="Convert images to PDF online for free. Combine multiple JPG, PNG, WEBP images into one PDF document. Choose A4, Letter, or A3 page size. 100% browser-based." />
-        <link rel="canonical" href="https://cropimages.store/tools/image-to-pdf" />
+        <title>Free Image to PDF Converter — Combine Multiple Photos into One PDF | Image Resize</title>
+        <meta name="description" content="Convert JPG, PNG, WEBP images to PDF online free. Combine multiple photos into a single PDF document. Choose A4, Letter, or A3 page size — 100% browser-based, no upload." />
+        <link rel="canonical" href="https://imageresize.app/tools/image-to-pdf" />
+        <meta property="og:title" content="Free Image to PDF — Image Resize" />
+        <meta property="og:description" content="Convert multiple JPG, PNG images into one PDF. Choose page size and orientation — free, instant, no upload needed." />
+        <meta property="og:url" content="https://imageresize.app/tools/image-to-pdf" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Image to PDF Converter",
+          "description": "Free online image to PDF converter — combine multiple photos into a single PDF document instantly in your browser.",
+          "url": "https://imageresize.app/tools/image-to-pdf",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="image-to-pdf" title="Image to PDF" description="Combine one or multiple images into a single PDF — choose page size and orientation, free & private." pageTitle="Image to PDF">
 
@@ -201,6 +214,13 @@ export default function ImageToPdf() {
         <ToolArticle
           heading="How to Convert Images to PDF"
           subheading="Combine one or more images into a single PDF document — choose page size, orientation, and order."
+          body={[
+            "Converting images to PDF is one of the most practical document tasks in both professional and personal contexts. PDFs are the universal document format — they display identically on every device and operating system, preserve image quality exactly, cannot be accidentally edited, and are accepted by virtually every system that receives documents. When you need to submit multiple photos as a single document (application forms, project portfolios, receipts for expense reports, ID verification, property inspection photos), combining them into a PDF is always cleaner than attaching multiple separate image files.",
+            "The most common use case is consolidating paper documents that have been photographed or scanned. A multi-page form photographed one page at a time produces 4–8 separate JPEG files. Combining them into a single ordered PDF makes the document coherent, easy to review, and appropriate to send or submit. Similarly, e-commerce sellers photographing products from multiple angles can combine 6–8 product shots into a single PDF catalog page. Real estate agents combine interior and exterior photos into PDF walk-through documents.",
+            "<strong>Choosing the Right Page Size:</strong> A4 (210×297mm / 8.27×11.69 inches) is the international standard document size — used throughout Europe, Asia, and most of the world. Letter (8.5×11 inches) is the North American standard used in the US and Canada. A3 (297×420mm) is double the size of A4 — appropriate for architectural drawings, large format plans, and oversized prints. Legal (8.5×14 inches) is used for legal documents in the US. For most purposes, use A4 unless you know your recipient or submission system expects Letter. When in doubt, A4 is the safer choice for international submissions.",
+            "<strong>Portrait vs. Landscape Orientation:</strong> Choose portrait (tall) for documents, receipts, forms, portraits, and any image that is taller than it is wide. Choose landscape (wide) for panoramic photos, wide landscapes, spreadsheet screenshots, presentation slides, and any image wider than it is tall. Our tool automatically fits each image to the selected page size while maintaining its aspect ratio — white margins are added to fill any remaining space, keeping images sharp and un-distorted.",
+            "<strong>File Size Considerations:</strong> PDF files containing images can be large — especially if you include many high-resolution photos. A PDF with 10 uncompressed 4K photos can exceed 50 MB. For submissions with file size limits, compress your images first using our Image Compressor tool (reducing each photo to 200–400 KB at 80% JPEG quality), then combine them into a PDF. This typically produces a 2–5 MB document from 10 photos while maintaining professional appearance. All PDF generation happens entirely in your browser using jsPDF — nothing is uploaded to any server.",
+          ]}
           steps={[
             { title: "Upload your images", description: "Select one or multiple JPG, PNG, WEBP, or GIF files. Up to 20 images per PDF." },
             { title: "Review order", description: "Images appear as numbered thumbnails. Click ✕ on any to remove it, or add more with the + button." },

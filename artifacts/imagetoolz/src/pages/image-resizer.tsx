@@ -166,9 +166,23 @@ export default function ImageResizer() {
   return (
     <>
       <Helmet>
-        <title>Free Image Resizer - Resize Images Instantly | CropImages</title>
-        <meta name="description" content="Resize images online for free. Set exact pixel dimensions, use social media presets (Instagram, YouTube, Twitter), lock aspect ratio, choose format and quality. 100% browser-based." />
-        <link rel="canonical" href="https://cropimages.store/" />
+        <title>Free Image Resizer Online — Resize Images Without Losing Quality | Image Resize</title>
+        <meta name="description" content="Resize images online free. Set exact pixel dimensions, use Instagram, YouTube, Twitter presets, lock aspect ratio, choose JPEG/PNG/WEBP. 100% browser-based — photos never uploaded." />
+        <link rel="canonical" href="https://imageresize.app/" />
+        <meta property="og:title" content="Free Image Resizer Online — Image Resize" />
+        <meta property="og:description" content="Resize images for social media, web, and print. 25+ presets, custom dimensions, JPEG/PNG/WEBP output. Free, instant, private." />
+        <meta property="og:url" content="https://imageresize.app/" />
+        <meta property="og:type" content="website" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Image Resizer",
+          "description": "Free online image resizer — resize images to exact pixel dimensions with social media presets. 100% browser-based, no upload.",
+          "url": "https://imageresize.app/",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout
         toolId="image-resizer"
@@ -353,6 +367,13 @@ export default function ImageResizer() {
         <ToolArticle
           heading="How to Resize an Image Online"
           subheading="Free, private, and instant — all processing happens in your browser. No uploads, no accounts."
+          body={[
+            "Resizing images is one of the most frequent tasks for anyone who creates digital content, manages a website, or posts on social media. Every platform has different size requirements — Instagram wants a square 1080×1080px post, YouTube thumbnails need to be exactly 1280×720px, and email headers are typically 600px wide. Submitting an image at the wrong size means the platform's algorithm will auto-crop it, often cutting off faces, text, or the most important visual element. Our free image resizer solves this instantly with 25+ built-in presets covering all major platforms.",
+            "Beyond social media, image dimensions directly affect your website's search engine ranking. Google's Core Web Vitals include Largest Contentful Paint (LCP) — a measure of how quickly the main visual content loads. A single unoptimized 6 MB photo from a smartphone, displayed at 800px wide on a blog post, still forces every visitor to download the full 6 MB. Resizing that image to exactly the display width and appropriate quality can reduce it to under 200 KB — a 97% reduction that makes your page load in under a second instead of 5–10 seconds.",
+            "Our tool processes images entirely within your browser using the HTML5 Canvas API. When you upload an image, it is loaded into your browser's local memory — it never travels over the internet to any server. The resizing calculation happens on your device's CPU in milliseconds. The processed image is then made available for download directly from your browser's memory. This design is both faster than server-based tools (no upload/download round trip) and completely private — no one but you ever sees your images.",
+            "<strong>Choosing the Right Output Format:</strong> JPEG is ideal for photographs — lossy compression achieves 80–95% file size reduction with no visible quality difference at 85–90% quality. PNG is lossless and essential for graphics with transparency, logos, and interface screenshots. WEBP is the modern web format — 25–35% smaller than JPEG at equivalent quality, with full browser support in 2026. For most web publishing use cases, WEBP is the optimal choice. For email and universal compatibility, JPEG at 85% quality is the safest option.",
+            "<strong>Understanding Aspect Ratio:</strong> The aspect ratio is the proportional relationship between an image's width and height. Locking the aspect ratio when resizing ensures the image is scaled proportionally — no stretching or distortion. Always keep aspect ratio locked unless you specifically need a non-proportional result, such as filling a fixed banner slot. Downscaling (making images smaller) is always sharp and clean. Upscaling (making images larger) creates soft, blurry results because the tool must invent pixels — avoid it whenever possible.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Drag & drop a JPG, PNG, WEBP, or GIF — or click Select File. Your image never leaves your device." },
             { title: "Choose a preset or enter custom dimensions", description: "Pick from 25+ presets for Instagram, YouTube, Twitter, print, and web — or enter exact width × height in pixels." },

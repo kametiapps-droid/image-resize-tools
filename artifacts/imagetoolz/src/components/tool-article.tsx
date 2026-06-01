@@ -10,31 +10,35 @@ export interface ToolArticleFaq {
   answer: string;
 }
 
-export interface ToolArticleTip {
-  text: string;
-}
-
 export interface ToolArticleProps {
   heading: string;
   subheading?: string;
+  body?: string[];
   steps: ToolArticleStep[];
   tips: string[];
   faqs: ToolArticleFaq[];
   children?: React.ReactNode;
 }
 
-export function ToolArticle({ heading, subheading, steps, tips, faqs, children }: ToolArticleProps) {
+export function ToolArticle({ heading, subheading, body, steps, tips, faqs, children }: ToolArticleProps) {
   return (
     <section className="mt-16 border-t border-gray-100 dark:border-gray-800 pt-12">
       <div className="max-w-4xl mx-auto space-y-12">
 
-        {/* Heading */}
         <div className="text-center space-y-2">
           <h2 className="text-2xl font-bold tracking-tight text-gray-900 dark:text-white">{heading}</h2>
           {subheading && <p className="text-sm text-gray-500 dark:text-gray-400 max-w-xl mx-auto">{subheading}</p>}
         </div>
 
-        {/* Steps */}
+        {body && body.length > 0 && (
+          <div className="prose prose-gray dark:prose-invert max-w-none space-y-4">
+            {body.map((para, i) => (
+              <p key={i} className="text-gray-600 dark:text-gray-300 leading-relaxed text-[15px]"
+                dangerouslySetInnerHTML={{ __html: para }} />
+            ))}
+          </div>
+        )}
+
         <div>
           <h3 className="text-xs font-semibold uppercase tracking-widest text-green-600 dark:text-green-500 mb-6">How it works</h3>
           <ol className="space-y-5">
@@ -52,12 +56,9 @@ export function ToolArticle({ heading, subheading, steps, tips, faqs, children }
           </ol>
         </div>
 
-        {/* Optional extra content (e.g. table) */}
         {children && <div>{children}</div>}
 
-        {/* Tips + FAQ side by side */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Tips */}
           <div className="rounded-2xl border border-green-100 dark:border-green-900/50 bg-green-50/50 dark:bg-green-950/20 p-6">
             <h3 className="text-xs font-semibold uppercase tracking-widest text-green-600 dark:text-green-500 mb-4">Pro Tips</h3>
             <ul className="space-y-3">
@@ -70,7 +71,6 @@ export function ToolArticle({ heading, subheading, steps, tips, faqs, children }
             </ul>
           </div>
 
-          {/* FAQ */}
           <div className="rounded-2xl border border-gray-100 dark:border-gray-800 bg-white dark:bg-gray-900 p-6 space-y-5">
             <h3 className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-4">FAQ</h3>
             {faqs.map((faq, i) => (

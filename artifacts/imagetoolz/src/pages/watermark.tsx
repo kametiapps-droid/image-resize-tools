@@ -112,9 +112,22 @@ export default function Watermark() {
   return (
     <>
       <Helmet>
-        <title>Free Watermark Tool - Add Text Watermark to Images | CropImages</title>
-        <meta name="description" content="Add custom text watermarks to your images online for free. Control position, size, color, and opacity. 100% browser-based — no upload needed." />
-        <link rel="canonical" href="https://cropimages.store/tools/watermark" />
+        <title>Free Watermark Tool — Add Text Watermark to Photos Online | Image Resize</title>
+        <meta name="description" content="Add custom text watermarks to images online free. Protect photos with your name, logo text, or website. Control position, font size, color, opacity — no upload, instant preview." />
+        <link rel="canonical" href="https://imageresize.app/tools/watermark" />
+        <meta property="og:title" content="Free Watermark Tool — Image Resize" />
+        <meta property="og:description" content="Add text watermarks to protect your photos. Choose position, opacity, color, and size — free, browser-based, no upload." />
+        <meta property="og:url" content="https://imageresize.app/tools/watermark" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Watermark Tool",
+          "description": "Free online watermark tool — add customizable text watermarks to photos to protect your copyright.",
+          "url": "https://imageresize.app/tools/watermark",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="watermark" title="Add Watermark" description="Protect your images with custom text watermarks — choose position, size, color, and opacity." pageTitle="Add Watermark">
         <canvas ref={canvasRef} className="hidden" />
@@ -216,6 +229,13 @@ export default function Watermark() {
         <ToolArticle
           heading="How to Add a Watermark to Images"
           subheading="Protect your work and brand every image — fully customizable text, position, color, and opacity."
+          body={[
+            "A watermark is your permanent signature on every image you share online. In 2026, digital content spreads faster than ever — a photo you post today can be downloaded, re-shared, and reposted across dozens of platforms within hours. Without a watermark, there is no visible claim of ownership. With one, everyone who sees the image knows who created it, and interested buyers or collaborators can find you. Watermarks serve two distinct purposes: copyright protection (making ownership clear and theft visible) and branding (turning every shared image into a marketing touchpoint).",
+            "The most important watermarking decision is placement. A watermark in the bottom corner is easy to crop out — this is the most common method of removing watermarks from stolen images. More effective placements include the center of the image (overlapping the main subject, impossible to crop out), lower-center or upper-center (harder to crop than corners while less visually intrusive than dead-center), or running diagonally across the subject. For social media branding where the goal is attribution rather than preventing theft, a subtle corner placement at 30–50% opacity is standard — visible without being distracting.",
+            "<strong>Choosing the Right Opacity:</strong> Opacity is the balance between visibility and visual intrusion. At 100% opacity, a white watermark is fully solid — highly visible but potentially distracting from the image. At 20%, it may be difficult to read over light backgrounds. The sweet spot for most social media branding is 30–50% opacity: clearly visible on hover or focus, but not dominating the composition. For preview images on stock photo sites where you want to drive purchases, use 70–85% opacity so the watermark is prominent.",
+            "<strong>Color Selection for Maximum Readability:</strong> A white watermark disappears over bright backgrounds; a black watermark disappears over dark backgrounds. For consistent readability over any background, use white with a slight dark drop shadow (or vice versa). Many professional photographers use a semi-transparent white watermark with a subtle gray stroke — this combination remains legible over both light and dark areas of any photograph. Our tool lets you choose any color from the picker, so you can match your brand colors exactly.",
+            "<strong>What Text to Use in Your Watermark:</strong> Your watermark text should communicate ownership and enable people to find you. Options include: your full name (for personal photographers), your brand or business name, your website URL (most valuable — directly enables purchase/contact), your social media handle (@yourusername), or a combination like '© YourName | yoursite.com'. Keep it concise — a long watermark needs to be large to be readable, taking up more of the image. A short handle or domain at moderate size is more elegant and less intrusive.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Drag & drop or click Select File. Supports JPG, PNG, WEBP, and GIF." },
             { title: "Enter your watermark text", description: "Type your name, brand, website, or any text. This will appear on the image." },

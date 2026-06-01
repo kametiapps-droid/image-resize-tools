@@ -86,9 +86,22 @@ export default function ImageRotator() {
   return (
     <>
       <Helmet>
-        <title>Free Image Rotator - Rotate & Flip Images Online | CropImages</title>
-        <meta name="description" content="Rotate images to any angle and flip horizontally or vertically online for free. Instant browser-based processing — no upload, no signup." />
-        <link rel="canonical" href="https://cropimages.store/tools/image-rotator" />
+        <title>Free Image Rotator — Rotate & Flip Images Online 90 Degrees | Image Resize</title>
+        <meta name="description" content="Rotate images 90, 180, 270 degrees or any custom angle online free. Fix sideways photos, flip images horizontally or vertically — no upload, instant result, privacy safe." />
+        <link rel="canonical" href="https://imageresize.app/tools/image-rotator" />
+        <meta property="og:title" content="Free Image Rotator — Image Resize" />
+        <meta property="og:description" content="Rotate images 90/180/270° or any angle. Flip horizontally or vertically. Fix sideways photos instantly — free, browser-based, no upload." />
+        <meta property="og:url" content="https://imageresize.app/tools/image-rotator" />
+        <script type="application/ld+json">{JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          "name": "Image Rotator",
+          "description": "Free online image rotator — rotate and flip images instantly without uploading to any server.",
+          "url": "https://imageresize.app/tools/image-rotator",
+          "applicationCategory": "MultimediaApplication",
+          "operatingSystem": "Any",
+          "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+        })}</script>
       </Helmet>
       <ToolLayout toolId="image-rotator" title="Rotate & Flip Image" description="Rotate your image to any angle and flip horizontally or vertically — instantly in your browser." pageTitle="Rotate & Flip Image">
         <canvas ref={canvasRef} className="hidden" />
@@ -196,8 +209,15 @@ export default function ImageRotator() {
         )}
 
         <ToolArticle
-          heading="How to Rotate & Flip Images Online"
+          heading="How to Rotate &amp; Flip Images Online"
           subheading="Fix orientation, create mirrors, or add creative angles — live preview, instant download."
+          body={[
+            "Image rotation is one of the most common image corrections needed in everyday digital work. Smartphones and digital cameras embed an orientation flag in image metadata (EXIF data) that tells software which way to display the photo. Most modern applications respect this flag — but many older systems, web browsers in certain contexts, and image processing pipelines do not. The result: a photo that looks correctly oriented in your camera's gallery appears rotated 90 degrees when you upload it to a website, share it in a message, or embed it in a document. The fix is simple — rotate it to the correct orientation and save the file.",
+            "The most common rotation need is correcting sideways photos. When you hold a smartphone vertically to take a portrait photo, the camera sensor actually captures the image sideways and embeds an EXIF orientation flag telling software to rotate it 90 degrees for display. Some platforms and tools strip this EXIF flag or ignore it entirely, causing the photo to appear sideways. A quick 90° rotation (either direction, depending on which way it's sideways) permanently bakes the correct orientation into the file, making it display correctly everywhere.",
+            "<strong>90°, 180°, and 270° Rotations:</strong> These are the most common rotation angles and are mathematically lossless for raster images. At exactly 90°, 180°, or 270°, every pixel maps perfectly to a new position — no interpolation is needed, and the image quality is identical to the original. The output file size may differ slightly due to format re-encoding, but the visual quality is unchanged. For JPEG files specifically, 90-degree-multiple rotations can be performed in a truly lossless way (no re-encoding) when the dimensions are multiples of the JPEG block size (8 or 16 pixels). Our tool handles this automatically.",
+            "<strong>Custom Angle Rotation:</strong> When you rotate an image by a non-multiple of 90° (e.g., 15° to straighten a crooked horizon), the tool must use interpolation to fill in the new pixel values along diagonal edges. The most common interpolation method is bilinear interpolation, which produces smooth, natural-looking results at the cost of slightly softened edges. For photography and general use, this is invisible. For graphics with hard edges or text, you may notice slight softening at extreme angles. Custom angles also introduce transparent corners (filled with white or another background color) unless you have a square image.",
+            "<strong>Flipping vs. Rotating:</strong> Flipping and rotating are different operations. A horizontal flip (mirror) reflects the image left-to-right — the left side becomes the right side. A vertical flip reflects top-to-bottom. A 180° rotation is NOT the same as flipping both axes — it is equivalent to flipping horizontally AND flipping vertically. Common use cases for flipping: correcting selfies that appear as mirror images, creating symmetrical compositions, reversing text overlays, and artistic effects. Flipping is always lossless and produces a pixel-perfect result regardless of image dimensions.",
+          ]}
           steps={[
             { title: "Upload your image", description: "Drag & drop or click to browse — JPG, PNG, WEBP, and GIF all supported." },
             { title: "Choose rotation", description: "Click 90° Left, 180°, or 90° Right for quick rotation. Use the slider for any angle from 0–359°." },
